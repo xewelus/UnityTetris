@@ -5,23 +5,27 @@ using UnityEngine;
 public class GameSystem : MonoBehaviour
 {
 	private GameSystem m_Instance;
-	public GameSystem Instance { get { return m_Instance; } }
+	public GameSystem Instance { get { return this.m_Instance; } }
 
+	// ReSharper disable once UnusedMember.Local
 	void Awake()
 	{
-		m_Instance = this;
+		this.m_Instance = this;
 	}
 
+	// ReSharper disable once UnusedMember.Local
 	void OnDestroy()
 	{
-		m_Instance = null;
+		this.m_Instance = null;
 	}
 
+	// ReSharper disable once UnusedMember.Local
 	void Update()
 	{
 		// global game update logic goes here
 	}
 
+	// ReSharper disable once UnusedMember.Local
 	void OnGui()
 	{
 		// common GUI code goes here
