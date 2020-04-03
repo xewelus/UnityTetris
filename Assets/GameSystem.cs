@@ -4,48 +4,51 @@ using UnityEngine;
 
 public class GameSystem : MonoBehaviour
 {
-	private GameSystem m_Instance;
-	public GameSystem Instance { get { return this.m_Instance; } }
+	private static GameSystem instance;
+	public static GameSystem Instance { get { return instance; } }
 
 	public static Random Rnd = new Random();
 
 	public GameObject AtomCube;
+	public Material Material1;
+	public Material Material2;
+	public Material Material3;
 
 	// ReSharper disable once UnusedMember.Local
 	void Awake()
 	{
-		this.m_Instance = this;
+		instance = this;  
 		UnityEditor.EditorUtility.DisplayDialog("Hello World!", "Hello", "OK");
 		return;
 
-		for (int y = 0; y < 20; y++)
-		{
-			for (int x = 0; x < 10; x++)
-			{
-				GameObject atom = Instantiate(this.AtomCube, new Vector3(x, y, 0), Quaternion.identity);
-				Renderer rndr = atom.GetComponent<Renderer>();
+		//for (int y = 0; y < 20; y++)
+		//{
+		//	for (int x = 0; x < 10; x++)
+		//	{
+		//		GameObject atom = Instantiate(this.AtomCube, new Vector3(x, y, 0), Quaternion.identity);
+		//		Renderer rndr = atom.GetComponent<Renderer>();
 
-				int color = Random.Range(1, 4);
-				if (color == 1)
-				{
-					rndr.material.color = Color.blue;
-				}
-				else if (color == 2)
-				{
-					rndr.material.color = Color.red;
-				}
-				else if (color == 3)
-				{
-					rndr.material.color = Color.green;
-				}
-			}
-		}
+		//		int color = Random.Range(1, 4);
+		//		if (color == 1)
+		//		{
+		//			rndr.material.color = Color.blue;
+		//		}
+		//		else if (color == 2)
+		//		{
+		//			rndr.material.color = Color.red;
+		//		}
+		//		else if (color == 3)
+		//		{
+		//			rndr.material.color = Color.green;
+		//		}
+		//	}
+		//}
 	}
 
 	// ReSharper disable once UnusedMember.Local
 	void OnDestroy()
 	{
-		this.m_Instance = null;
+		instance = null; 
 	}
 
 	// ReSharper disable once UnusedMember.Local
