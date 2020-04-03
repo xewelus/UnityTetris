@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FigureBehaviour : MonoBehaviour
 {
@@ -46,7 +49,12 @@ public class FigureBehaviour : MonoBehaviour
 		}
 	}
 
-    // Start is called before the first frame update
+	void Awake() 
+	{
+	    UnityEditor.EditorUtility.DisplayDialog("FigureBehaviour Start", "Awake", "OK");
+	}
+
+	// Start is called before the first frame update
 	void Start()
     {
 	    UnityEditor.EditorUtility.DisplayDialog("FigureBehaviour Start", "Hello", "OK");
@@ -62,31 +70,45 @@ public class FigureBehaviour : MonoBehaviour
 	private readonly List<GameObject> objs = new List<GameObject>();
 	void OnValidate()
 	{
-		lock (notCleared)
+		if (EditorApplication.isPlayingOrWillChangePlaymode)
 		{
-			notCleared.Add(this);
+			return;  
 		}
 
-		this.ClearObjs();
+		if (this.AtomCube == null)
+		{
+			return;
+		}
+
+		//this.ClearObjs();
+		this.ClearObjsByTransform();
+
+		if (!this.gameObject.activeInHierarchy)
+		{
+			return;
+		}
+
 		GameObject o = this.CreateAtom(Random.Range(-5, 5));
-		this.objs.Add(o);
+		this.objs.Add(o); 
+		Debug.Log("objs.Count " + this.objs.Count);
 
-		lock (notCleared)
-		{
-			UnityEditor.EditorUtility.DisplayDialog("Test", notCleared.Count.ToString() + " / " + allAtoms.Count, "OK");
-			foreach (FigureBehaviour b in notCleared)
-			{
-				if (!b.gameObject.scene.isLoaded)
-				{
-					b.ClearObjs();
-				}
-			}
-		}
+
+		//lock (notCleared)
+		//{
+		//	UnityEditor.EditorUtility.DisplayDialog("Test", notCleared.Count.ToString() + " / " + allAtoms.Count, "OK");
+		//	foreach (FigureBehaviour b in notCleared)
+		//	{
+		//		if (!b.gameObject.scene.isLoaded)
+		//		{
+		//			b.ClearObjs();
+		//		}
+		//	}
+		//}
 	}
 
 	private void ClearObjs()
 	{
-		List<GameObject> cloned = new List<GameObject>(this.objs);
+		List<GameObject> cloned = new List<GameObject>(this.objs); 
 
 		//foreach (GameObject obj in cloned)
 		//{
@@ -99,34 +121,52 @@ public class FigureBehaviour : MonoBehaviour
 
 
 		EditorApplication.delayCall += () =>
-												   {
-													   foreach (GameObject obj in cloned)
-													   {
-														   DestroyImmediate(obj);
-														   allAtoms.Remove(obj);
-													   }
+		                               {
+			                               foreach (GameObject obj in cloned)
+			                               {
+												Debug.Log("DestroyImmediate " + obj);
+				                               DestroyImmediate(obj);
+				                               allAtoms.Remove(obj);
+			                               }
+		                               };
 
-													   lock (notCleared)
-													   {
-														   notCleared.Remove(this);
-													   }
-												   };
-
-		this.objs.Clear();
+		this.objs.Clear();  
 	}
 
-	void DestroyFromEditor(GameObject obj)
+	private void ClearObjsByTransform()
 	{
-	    UnityEditor.EditorUtility.DisplayDialog("DestroyFromEditor", "Test", "OK");
-		this.ClearObjs();
-		EditorApplication.delayCall += () => DestroyImmediate(obj);
+		//Renderer r = this.GetComponent<Renderer>();
+		//if (r != null)
+		{
+			Debug.Log("need clear count" + this.transform.childCount);
+			foreach (Transform t in this.transform)
+			{
+				Debug.Log("need clear " + t.gameObject);
+				EditorApplication.delayCall += () =>
+											   {
+													Debug.Log("DestroyImmediate " + t.gameObject);
+													DestroyImmediate(t.gameObject);
+											   };
+			}
+		}
 	}
 
 	private GameObject CreateAtom(int x)
 	{
 		Vector3 localPoint = new Vector3(x, 0, 0);
 		Vector3 point = this.transform.TransformPoint(localPoint);
-		GameObject atom = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);
+
+		GameObject atom;
+		try
+		{
+			Debug.Log("this.gameObject.activeInHierarchy: " + this.gameObject.activeInHierarchy);
+			atom = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);  
+		}
+		catch (Exception)
+		{
+			Debug.LogError("this.gameObject.activeInHierarchy: " + this.gameObject.activeInHierarchy);
+			throw;
+		}
 		allAtoms.Add(atom);
 		Renderer rndr = atom.GetComponent<Renderer>();
 
