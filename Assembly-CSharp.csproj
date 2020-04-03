@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\FigureBehaviour.cs" />
     <Compile Include="Assets\GameSystem.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>E:/dev/unity/Tetris/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

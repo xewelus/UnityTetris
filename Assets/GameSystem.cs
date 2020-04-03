@@ -15,8 +15,9 @@ public class GameSystem : MonoBehaviour
 	void Awake()
 	{
 		this.m_Instance = this;
+		UnityEditor.EditorUtility.DisplayDialog("Hello World!", "Hello", "OK");
+		return;
 
-		
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 10; x++)
