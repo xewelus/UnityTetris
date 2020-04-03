@@ -7,6 +7,8 @@ public class GameSystem : MonoBehaviour
 	private GameSystem m_Instance;
 	public GameSystem Instance { get { return this.m_Instance; } }
 
+	public static Random Rnd = new Random();
+
 	public GameObject AtomCube;
 
 	// ReSharper disable once UnusedMember.Local
@@ -19,7 +21,22 @@ public class GameSystem : MonoBehaviour
 		{
 			for (int x = 0; x < 10; x++)
 			{
-				Instantiate(this.AtomCube, new Vector3(x, y, 0), Quaternion.identity);
+				GameObject atom = Instantiate(this.AtomCube, new Vector3(x, y, 0), Quaternion.identity);
+				Renderer rndr = atom.GetComponent<Renderer>();
+
+				int color = Random.Range(1, 4);
+				if (color == 1)
+				{
+					rndr.material.color = Color.blue;
+				}
+				else if (color == 2)
+				{
+					rndr.material.color = Color.red;
+				}
+				else if (color == 3)
+				{
+					rndr.material.color = Color.green;
+				}
 			}
 		}
 	}
