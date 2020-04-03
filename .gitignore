@@ -1,2 +1,5 @@
 Temp/
 Library/
+_ReSharper.Caches/
+obj/Debug/
+.vs/
