@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class GameSystem : MonoBehaviour
@@ -8,11 +10,8 @@ public class GameSystem : MonoBehaviour
 	public static GameSystem Instance { get { return instance; } }
 
 	public GameObject AtomCube;
-	public Material Material1;
-	public Material Material2;
-	public Material Material3;
 
-	// ReSharper disable once UnusedMember.Local
+	[PublicAPI]
 	void Awake()
 	{
 		instance = this;  

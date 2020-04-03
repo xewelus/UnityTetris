@@ -18,11 +18,7 @@ public class FigureBehaviour : MonoBehaviour
 	public bool EnableGeneration;
 
 	[DataMember]
-	public Material Material1;
-	[DataMember]
-	public Material Material2;
-	[DataMember]
-	public Material Material3;
+	public MaterialsScope MaterialsScope;
 
 	void Start()
     {
@@ -47,12 +43,12 @@ public class FigureBehaviour : MonoBehaviour
 			return;
 		}
 
+		this.DestroyChildren();
+
 		if (!this.EnableGeneration)
 		{
 			return;
 		}
-
-		this.DestroyChildren();
 
 		if (!this.gameObject.activeInHierarchy)
 		{
@@ -90,23 +86,23 @@ public class FigureBehaviour : MonoBehaviour
 
 		if (color == 1)
 		{
-			if (this.Material1 != null)
+			if (this.MaterialsScope?.Material1 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.Material1);
+				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material1);
 			}
 		}
 		else if (color == 2)
 		{
-			if (this.Material2 != null)
+			if (this.MaterialsScope?.Material2 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.Material2);
+				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material2);
 			}
 		}
 		else if (color == 3)
 		{
-			if (this.Material3 != null)
+			if (this.MaterialsScope?.Material3 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.Material3);
+				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material3);
 			}
 		}
 		return atom;
