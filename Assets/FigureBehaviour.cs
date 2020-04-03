@@ -1,16 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class FigureBehaviour : MonoBehaviour
 {
+	[DataMember]
 	public GameObject AtomCube;
-	public int Test2;
+
 	public List<string> Places = new List<string>();
+
+	[DataMember]
 	public readonly string Guid = System.Guid.NewGuid().ToString();
 
-	private static readonly HashSet<GameObject> allAtoms = new HashSet<GameObject>();
+	[DataMember]
+	public bool EnableGeneration;
+
+	[DataMember]
+	public Material Material1;
+	[DataMember]
+	public Material Material2;
+	[DataMember]
+	public Material Material3;
 
 	void Start()
     {
@@ -35,6 +47,11 @@ public class FigureBehaviour : MonoBehaviour
 			return;
 		}
 
+		if (!this.EnableGeneration)
+		{
+			return;
+		}
+
 		this.DestroyChildren();
 
 		if (!this.gameObject.activeInHierarchy)
@@ -42,14 +59,21 @@ public class FigureBehaviour : MonoBehaviour
 			return;
 		}
 
-		GameObject o = this.CreateAtom(Random.Range(-5, 5));
+		if (this.EnableGeneration)
+		{
+			GameObject o = this.CreateAtom(Random.Range(-5, 5));
+		}
 	}
 
 	private void DestroyChildren()
 	{
 		foreach (Transform t in this.transform)
 		{
-			EditorApplication.delayCall += () => DestroyImmediate(t.gameObject);
+			EditorApplication.delayCall += () =>
+			                               {
+				                               Debug.Log("DestroyImmediate = " + t.gameObject); 
+											   DestroyImmediate(t.gameObject);
+			                               };
 		}
 	}
 
@@ -64,26 +88,25 @@ public class FigureBehaviour : MonoBehaviour
 
 		int color = Random.Range(1, 4);
 
-		Debug.Log("GameSystem.Instance = ", GameSystem.Instance);
 		if (color == 1)
 		{
-			if (GameSystem.Instance?.Material1 != null)
+			if (this.Material1 != null)
 			{
-				rndr.material = GameSystem.Instance.Material1;
+				rndr.sharedMaterial = Instantiate(this.Material1);
 			}
 		}
 		else if (color == 2)
 		{
-			if (GameSystem.Instance?.Material2 != null)
+			if (this.Material2 != null)
 			{
-				rndr.material = GameSystem.Instance.Material2;
+				rndr.sharedMaterial = Instantiate(this.Material2);
 			}
 		}
 		else if (color == 3)
 		{
-			if (GameSystem.Instance?.Material3 != null)
+			if (this.Material3 != null)
 			{
-				rndr.material = GameSystem.Instance.Material3;
+				rndr.sharedMaterial = Instantiate(this.Material3);
 			}
 		}
 		return atom;

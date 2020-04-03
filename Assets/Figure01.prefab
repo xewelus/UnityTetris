@@ -45,3 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AtomCube: {fileID: 3437630943692563948, guid: e627f064a09788f4096d78ed8057fc1d,
     type: 3}
+  Test2: 1
+  Places: []
+  EnableGeneration: 0
+  Material1: {fileID: 2100000, guid: 0f059c3fd6c426141adba8c7395abf96, type: 2}
+  Material2: {fileID: 2100000, guid: 5ab56125f8e8e5b46a3146f683dee304, type: 2}
+  Material3: {fileID: 2100000, guid: 0f50743cd9771a44b91948d0093a26f0, type: 2}
