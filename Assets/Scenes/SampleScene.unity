@@ -641,10 +641,11 @@ MonoBehaviour:
   Width: 4
   Height: 4
   Rows:
-  - Values: 01000000
-  - Values: 00000000
-  - Values: 00000000
-  - Values: 00000000
+    List:
+    - Values: 00000000
+    - Values: 00000000
+    - Values: 00000000
+    - Values: 00000000
 --- !u!4 &1900147745
 Transform:
   m_ObjectHideFlags: 0

@@ -21,6 +21,9 @@ public class FigureBehaviour : MonoBehaviour
 	[DataMember]
 	public MaterialsScope MaterialsScope;
 
+	[DataMember]
+	public FigureAsset FigureAsset;
+
 	[PublicAPI]
 	void Start()
 	{

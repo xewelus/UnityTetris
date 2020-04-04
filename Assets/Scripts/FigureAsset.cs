@@ -18,53 +18,48 @@ public class FigureAsset : MonoBehaviour
 	public int Height = DEFAULT_SIZE;
 
 	[DataMember]
-	public List<Row> Rows = new List<Row>();
-
-	[DataMember]
-	public bool[,] Array = new bool[DEFAULT_SIZE, DEFAULT_SIZE];
+	public RowList Rows = new RowList();
 
 	private Size? prevSize;
 
-
 	private void Fill()
 	{
-		this.Array = new bool[this.Width, this.Height];
+		int width = this.Width;
+		int height = this.Height;
 
-		for (int y = 0; y < this.Height; y++)
+		for (int y = 0; y < height; y++)
 		{
 			Row row;
-			if (y < this.Rows.Count)
+			if (y < this.Rows.List.Count)
 			{
-				row = this.Rows[y];
+				row = this.Rows.List[y];
 			}
 			else
 			{
 				row = new Row();
-				this.Rows.Add(row);
+				this.Rows.List.Add(row);
 			}
 
-			for (int x = 0; x < this.Width; x++)
+			for (int x = 0; x < width; x++)
 			{
 				if (x >= row.Values.Count)
 				{
 					row.Values.Add(false);
 				}
-
-				this.Array[x, y] = false;
 			}
 
-			if (row.Values.Count > this.Width)
+			if (row.Values.Count > width)
 			{
-				row.Values.RemoveRange(this.Width, row.Values.Count - this.Width);
+				row.Values.RemoveRange(width, row.Values.Count - width);
 			}
 		}
 
-		if (this.Rows.Count > this.Height)
+		if (this.Rows.List.Count > height)
 		{
-			this.Rows.RemoveRange(this.Height, this.Rows.Count - this.Height);
+			this.Rows.List.RemoveRange(height, this.Rows.List.Count - height);
 		}
 
-		this.prevSize = new Size(this.Width, this.Height);
+		this.prevSize = new Size(width, height);
 	}
 
 	[PublicAPI]
@@ -79,6 +74,13 @@ public class FigureAsset : MonoBehaviour
 		{
 			this.Fill();
 		}
+	}
+
+	[Serializable]
+	public class RowList
+	{
+		[DataMember]
+		public List<Row> List = new List<Row>();
 	}
 
 	[Serializable]
