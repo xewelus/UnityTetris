@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public class FigureAsset : MonoBehaviour

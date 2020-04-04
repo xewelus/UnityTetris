@@ -36,6 +36,8 @@ public class FigureBehaviour : MonoBehaviour
 	[PublicAPI]
 	void OnValidate()
 	{
+		return;
+
 		if (EditorApplication.isPlayingOrWillChangePlaymode)
 		{
 			return;  
