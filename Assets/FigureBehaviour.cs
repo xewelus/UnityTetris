@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,8 +21,9 @@ public class FigureBehaviour : MonoBehaviour
 	[DataMember]
 	public MaterialsScope MaterialsScope;
 
+	[PublicAPI]
 	void Start()
-    {
+	{
 		if (this.AtomCube != null)
 	    {
 		    for (int x = 0; x < 4; x++)
@@ -31,6 +33,7 @@ public class FigureBehaviour : MonoBehaviour
 		}
     }
 
+	[PublicAPI]
 	void OnValidate()
 	{
 		if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -57,7 +60,7 @@ public class FigureBehaviour : MonoBehaviour
 
 		if (this.EnableGeneration)
 		{
-			GameObject o = this.CreateAtom(Random.Range(-5, 5));
+			this.CreateAtom(Random.Range(-5, 5));
 		}
 	}
 
@@ -67,13 +70,12 @@ public class FigureBehaviour : MonoBehaviour
 		{
 			EditorApplication.delayCall += () =>
 			                               {
-				                               Debug.Log("DestroyImmediate = " + t.gameObject); 
 											   DestroyImmediate(t.gameObject);
 			                               };
 		}
 	}
 
-	private GameObject CreateAtom(int x)
+	private void CreateAtom(int x)
 	{
 		Vector3 localPoint = new Vector3(x, 0, 0);
 		Vector3 point = this.transform.TransformPoint(localPoint);
@@ -82,41 +84,14 @@ public class FigureBehaviour : MonoBehaviour
 
 		Renderer rndr = atom.GetComponent<Renderer>();
 
-		int color = Random.Range(1, 4);
-
-		Material material = null;
-		if (color == 1)
+		if (this.MaterialsScope.Count > 0)
 		{
-			if (this.MaterialsScope?.Material1 != null)
-			{
-				material = this.MaterialsScope.Material1;
-			}
+			int color = Random.Range(0, this.MaterialsScope.Count);
+			rndr.sharedMaterial = this.MaterialsScope.GetMaterial(color);
 		}
-		else if (color == 2)
-		{
-			if (this.MaterialsScope?.Material2 != null)
-			{
-				material = this.MaterialsScope.Material2;
-			}
-		}
-		else if (color == 3)
-		{
-			if (this.MaterialsScope?.Material3 != null)
-			{
-				material = this.MaterialsScope.Material3;
-			}
-		}
-
-		if (material != null)
-		{
-			rndr.sharedMaterial = material; 
-			//rndr.sharedMaterial = Instantiate(material);
-		}
-
-		return atom;
 	}
 
-    // Update is called once per frame
+	[PublicAPI]
     void Update()
     {
 	    this.transform.Rotate(0.1f, 0f, 0f);

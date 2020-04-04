@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f833da0aba0354f834c03e91c01471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Material1: {fileID: 2100000, guid: af179af57951efd4d9b9dea8e6fe61a9, type: 2}
-  Material2: {fileID: 2100000, guid: 7f6a9e4b8e8fe79458944134b450990e, type: 2}
-  Material3: {fileID: 2100000, guid: 651750e7b81ef0d42a419c4bbf417504, type: 2}
+  Material: {fileID: 2100000, guid: 1bb6f0c5db46570408af89cd4ec12d2e, type: 2}
+  Colors:
+  - {r: 0.17647056, g: 0.4408951, b: 0.6784314, a: 0}
+  - {r: 1, g: 0, b: 0.07980776, a: 0}
+  - {r: 0, g: 1, b: 0, a: 0}
