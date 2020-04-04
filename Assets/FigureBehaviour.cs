@@ -84,27 +84,35 @@ public class FigureBehaviour : MonoBehaviour
 
 		int color = Random.Range(1, 4);
 
+		Material material = null;
 		if (color == 1)
 		{
 			if (this.MaterialsScope?.Material1 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material1);
+				material = this.MaterialsScope.Material1;
 			}
 		}
 		else if (color == 2)
 		{
 			if (this.MaterialsScope?.Material2 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material2);
+				material = this.MaterialsScope.Material2;
 			}
 		}
 		else if (color == 3)
 		{
 			if (this.MaterialsScope?.Material3 != null)
 			{
-				rndr.sharedMaterial = Instantiate(this.MaterialsScope.Material3);
+				material = this.MaterialsScope.Material3;
 			}
 		}
+
+		if (material != null)
+		{
+			rndr.sharedMaterial = material; 
+			//rndr.sharedMaterial = Instantiate(material);
+		}
+
 		return atom;
 	}
 
