@@ -77,7 +77,7 @@ namespace Assets.Scripts
 
 			Debug.Log("Need regenerate " + this.name);
 
-			this.DestroyChildren();
+			this.transform.DestroyChildrenOnDelayCall();
 
 			if (this.FigureAsset == null)
 			{
@@ -90,20 +90,6 @@ namespace Assets.Scripts
 			}
 
 			this.prevFigureAsset = this.FigureAsset;
-		}
-
-		private void DestroyChildren()
-		{
-			foreach (Transform t in this.transform)
-			{
-				EditorApplication.delayCall += () =>
-				                               {
-					                               if (t != null)
-					                               {
-						                               DestroyImmediate(t.gameObject);
-					                               }
-				                               };
-			}
 		}
 
 		private void CreateAtom(Point p)
