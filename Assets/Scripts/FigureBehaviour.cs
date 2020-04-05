@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using JetBrains.Annotations;
+﻿using System.Runtime.Serialization;
+using Assets.Interfaces;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Point = System.Drawing.Point;
 
-public class FigureBehaviour : MonoBehaviour
+public class FigureBehaviour : MonoBehaviour, IOnValidate, IOnGUI, IStart, IUpdate
 {
 	[DataMember]
 	public GameObject AtomCube;
@@ -30,13 +28,22 @@ public class FigureBehaviour : MonoBehaviour
 
 	private bool wasOnValidate;
 
-	[PublicAPI]
-	void Start()
+	public void OnGUI()
+	{
+		// common GUI code goes here
+		Debug.Log("OnGui");
+
+		if (GUI.Button(new Rect(Random.Range(10, 600), 10, 150, 100), "I am a button " + Random.Range(0, 1)))
+		{
+			print("You clicked the button!");
+		}
+	}
+
+	public void Start()
 	{
     }
 
-	[PublicAPI]
-	void OnValidate()
+	public void OnValidate()
 	{
 		if (!this.wasOnValidate)
 		{
@@ -119,8 +126,7 @@ public class FigureBehaviour : MonoBehaviour
 		}
 	}
 
-	[PublicAPI]
-    void Update()
+	public void Update()
     {
 	    this.transform.Rotate(0.1f, 0f, 0f);
     }

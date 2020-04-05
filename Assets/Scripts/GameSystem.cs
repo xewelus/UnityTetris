@@ -1,21 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using JetBrains.Annotations;
+﻿using Assets.Interfaces;
 using UnityEngine;
 
-public class GameSystem : MonoBehaviour
+public class GameSystem : MonoBehaviour, IAwake
 {
 	private static GameSystem instance;
 	public static GameSystem Instance { get { return instance; } }
 
 	public GameObject AtomCube;
 
-	[PublicAPI]
-	void Awake()
+	public void Awake()
 	{
 		instance = this;  
-		UnityEditor.EditorUtility.DisplayDialog("Hello World!", "Hello", "OK");
 		//this.FillCubes();
 	}
 
