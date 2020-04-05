@@ -63,9 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Interfaces\Interfaces.cs" />
+    <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
-    <Compile Include="Assets\Scripts\FigureBehaviour.cs" />
     <Compile Include="Assets\Scripts\GameSystem.cs" />
     <Compile Include="Assets\Scripts\MaterialsScope.cs" />
     <Reference Include="Unity.Timeline.Editor">
