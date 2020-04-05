@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
+    <Compile Include="Assets\Scripts\GameDesk.cs" />
     <Compile Include="Assets\Scripts\GameSystem.cs" />
     <Compile Include="Assets\Scripts\MaterialsScope.cs" />
     <Reference Include="Unity.Timeline.Editor">

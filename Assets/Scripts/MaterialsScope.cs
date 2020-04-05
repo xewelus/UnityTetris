@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Assets.Interfaces;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine;
 namespace Assets.Scripts
 {
 	[Serializable]
-	public class MaterialsScope : MonoBehaviour
+	public class MaterialsScope : MonoBehaviour, IOnValidate
 	{
 		[DataMember]
 		public Material Material;
@@ -18,8 +19,7 @@ namespace Assets.Scripts
 
 		private readonly List<Material> materials = new List<Material>();
 
-		[PublicAPI]
-		void OnValidate()
+		public void OnValidate()
 		{
 			if (EditorApplication.isPlayingOrWillChangePlaymode)
 			{
