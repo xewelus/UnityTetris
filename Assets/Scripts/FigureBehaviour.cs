@@ -16,13 +16,19 @@ public class FigureBehaviour : MonoBehaviour
 	public readonly string Guid = System.Guid.NewGuid().ToString();
 
 	[DataMember]
+	public bool EnableGeneration;
+
+	[DataMember]
 	public MaterialsScope MaterialsScope;
 
 	[DataMember]
 	public FigureAsset FigureAsset;
+	private FigureAsset prevFigureAsset;
 
 	[DataMember]
 	public Color Color = Color.white;
+
+	private bool wasOnValidate;
 
 	[PublicAPI]
 	void Start()
@@ -32,15 +38,33 @@ public class FigureBehaviour : MonoBehaviour
 	[PublicAPI]
 	void OnValidate()
 	{
+		if (!this.wasOnValidate)
+		{
+			this.wasOnValidate = true;
+			this.prevFigureAsset = this.FigureAsset;
+		}
+
 		if (EditorApplication.isPlayingOrWillChangePlaymode)
 		{
 			return;  
+		}
+
+		if (!this.EnableGeneration)
+		{
+			return;
 		}
 
 		if (this.AtomCube == null)
 		{
 			return;
 		}
+
+		if (this.prevFigureAsset == this.FigureAsset)
+		{
+			return;
+		}
+
+		Debug.Log("Need regenerate " + this.name);
 
 		this.DestroyChildren();
 
@@ -53,6 +77,8 @@ public class FigureBehaviour : MonoBehaviour
 		{
 			this.CreateAtom(p);
 		}
+
+		this.prevFigureAsset = this.FigureAsset;
 	}
 
 	private void DestroyChildren()
