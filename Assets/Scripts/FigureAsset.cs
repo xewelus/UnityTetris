@@ -76,6 +76,22 @@ public class FigureAsset : MonoBehaviour
 		}
 	}
 
+	public IEnumerable<Point> GetCells()
+	{
+		for (int y = 0; y < this.Rows.List.Count; y++)
+		{
+			Row row = this.Rows.List[this.Rows.List.Count - y - 1];
+			for (int x = 0; x < row.Values.Count; x++)
+			{
+				bool value = row.Values[x];
+				if (value)
+				{
+					yield return new Point(x, y);
+				}
+			}
+		}
+	}
+
 	[Serializable]
 	public class RowList
 	{

@@ -39,9 +39,11 @@ public class FigureAssetDrawer : PropertyDrawer
 					EditorGUI.PropertyField(rect, valueProperty, GUIContent.none);
 
 					x++;
+					if (x >= valuesProperty.arraySize) break;
 				}
 
 				y++;
+				if (y >= listProperty.arraySize) break;
 			}
 		}
 		finally
@@ -62,6 +64,7 @@ public class FigureAssetDrawer : PropertyDrawer
 			SerializedProperty rowProperty = listProperty.GetArrayElementAtIndex(y);
 			if (rowProperty == null) break;
 			y++;
+			if (y >= listProperty.arraySize) break;
 		}
 		return y * ROW_HEIGHT;
 	}

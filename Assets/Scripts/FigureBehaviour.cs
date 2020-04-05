@@ -1,22 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Point = System.Drawing.Point;
 
 public class FigureBehaviour : MonoBehaviour
 {
 	[DataMember]
 	public GameObject AtomCube;
 
-	public List<string> Places = new List<string>();
-
 	[DataMember]
 	public readonly string Guid = System.Guid.NewGuid().ToString();
-
-	[DataMember]
-	public bool EnableGeneration;
 
 	[DataMember]
 	public MaterialsScope MaterialsScope;
@@ -24,23 +21,17 @@ public class FigureBehaviour : MonoBehaviour
 	[DataMember]
 	public FigureAsset FigureAsset;
 
+	[DataMember]
+	public Color Color = Color.white;
+
 	[PublicAPI]
 	void Start()
 	{
-		if (this.AtomCube != null)
-	    {
-		    for (int x = 0; x < 4; x++)
-		    {
-			    this.CreateAtom(x);
-		    }
-		}
     }
 
 	[PublicAPI]
 	void OnValidate()
 	{
-		return;
-
 		if (EditorApplication.isPlayingOrWillChangePlaymode)
 		{
 			return;  
@@ -53,19 +44,14 @@ public class FigureBehaviour : MonoBehaviour
 
 		this.DestroyChildren();
 
-		if (!this.EnableGeneration)
+		if (this.FigureAsset == null)
 		{
 			return;
 		}
 
-		if (!this.gameObject.activeInHierarchy)
+		foreach (Point p in this.FigureAsset.GetCells())
 		{
-			return;
-		}
-
-		if (this.EnableGeneration)
-		{
-			this.CreateAtom(Random.Range(-5, 5));
+			this.CreateAtom(p);
 		}
 	}
 
@@ -75,24 +61,35 @@ public class FigureBehaviour : MonoBehaviour
 		{
 			EditorApplication.delayCall += () =>
 			                               {
-											   DestroyImmediate(t.gameObject);
+				                               if (t != null)
+				                               {
+					                               DestroyImmediate(t.gameObject);
+				                               }
 			                               };
 		}
 	}
 
-	private void CreateAtom(int x)
+	private void CreateAtom(Point p)
 	{
-		Vector3 localPoint = new Vector3(x, 0, 0);
+		Vector3 localPoint = new Vector3(p.X, p.Y, 0);
 		Vector3 point = this.transform.TransformPoint(localPoint);
 
 		GameObject atom = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);
 
 		Renderer rndr = atom.GetComponent<Renderer>();
 
-		if (this.MaterialsScope.Count > 0)
+		if (this.MaterialsScope != null)
 		{
-			int color = Random.Range(0, this.MaterialsScope.Count);
-			rndr.sharedMaterial = this.MaterialsScope.GetMaterial(color);
+			if (this.MaterialsScope.Count > 0)
+			{
+				int color = Random.Range(0, this.MaterialsScope.Count);
+				rndr.sharedMaterial = this.MaterialsScope.GetMaterial(color);
+			}
+		}
+		else
+		{
+			rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
+			rndr.sharedMaterial.color = this.Color;
 		}
 	}
 
