@@ -17,7 +17,8 @@ namespace Assets.Scripts
 		[DataMember]
 		public List<Color> Colors = new List<Color>();
 
-		private readonly List<Material> materials = new List<Material>();
+		[SerializeField, HideInInspector]
+		private List<Material> materials = new List<Material>();
 
 		public void OnValidate()
 		{
@@ -43,6 +44,11 @@ namespace Assets.Scripts
 				if (i < this.materials.Count)
 				{
 					material = this.materials[i];
+					if (material == null)
+					{
+						material = Instantiate(this.Material);
+						this.materials[i] = material;
+					}
 				}
 				else
 				{
