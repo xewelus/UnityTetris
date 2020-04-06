@@ -1223,8 +1223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b4e6528fb6fdc42818962c196b2e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 10
-  Height: 20
+  Width: 3
+  Height: 3
   AtomCube: {fileID: 3437630943692563948, guid: e627f064a09788f4096d78ed8057fc1d,
     type: 3}
   MaterialsScope: {fileID: 6230252255122673428, guid: db211075d69c5f04e9ee16d9c1a01abf,
@@ -1459,8 +1459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852395569}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.5, y: 9.5, z: 1.3}
-  m_LocalScale: {x: 10, y: 20, z: 1}
+  m_LocalPosition: {x: 1.5, y: 1.5, z: 1.3}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 1339607487}
   m_RootOrder: 0

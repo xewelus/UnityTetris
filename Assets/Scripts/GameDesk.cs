@@ -50,6 +50,7 @@ namespace Assets.Scripts
 			if (this.BackWall != null)
 			{
 				this.BackWall.transform.localScale = new Vector3(this.Width, this.Height, this.BackWall.transform.localScale.z);
+				this.BackWall.transform.localPosition = new Vector3(this.Width / 2f, this.Height / 2f, this.BackWall.transform.localPosition.z);
 			}
 
 			if (this.CupLayer != null)
@@ -64,7 +65,7 @@ namespace Assets.Scripts
 						{
 							for (int x = 0; x < this.Width; x++)
 							{
-								CreateAtom(x, y, this.AtomCube, this.CupLayer, this.MaterialsScope);
+								CreateRandomAtom(x, y, this.AtomCube, this.CupLayer, this.MaterialsScope);
 							}
 						}
 					}
@@ -72,9 +73,9 @@ namespace Assets.Scripts
 			}
 		}
 
-		private static void CreateAtom(int x, int y, GameObject atomCube, GameObject cupLayer, MaterialsScope materialsScope)
+		private static void CreateRandomAtom(int x, int y, GameObject atomCube, GameObject cupLayer, MaterialsScope materialsScope)
 		{
-			Vector3 localPoint = new Vector3(x, y, 0);
+			Vector3 localPoint = new Vector3(x + 0.5f, y + 0.5f, 0);
 			Vector3 point = cupLayer.transform.TransformPoint(localPoint);
 
 			GameObject atom = Instantiate(atomCube, point, Quaternion.identity, cupLayer.transform);
