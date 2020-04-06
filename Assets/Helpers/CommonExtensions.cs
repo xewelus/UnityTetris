@@ -5,6 +5,9 @@ namespace Assets
 {
 	public static class CommonExtensions
 	{
+		/// <summary>
+		/// Удаляет все чайлды в режиме редактора.
+		/// </summary>
 		public static void DestroyChildrenOnDelayCall(this Transform transform)
 		{
 			foreach (Transform t in transform)

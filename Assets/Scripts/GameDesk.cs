@@ -9,11 +9,9 @@ namespace Assets.Scripts
 	{
 		[DataMember]
 		public int Width = 10;
-		private int prevWidth;
 
 		[DataMember]
 		public int Height = 20;
-		private int prevHeight;
 
 		[DataMember]
 		public GameObject AtomCube;
@@ -39,14 +37,6 @@ namespace Assets.Scripts
 				return;
 			}
 
-			if (!this.isValidated)
-			{
-				this.prevWidth = this.Width;
-				this.prevHeight = this.Height;
-
-				this.isValidated = true;
-			}
-
 			if (this.BackWall != null)
 			{
 				this.BackWall.transform.localScale = new Vector3(this.Width, this.Height, this.BackWall.transform.localScale.z);
@@ -57,18 +47,20 @@ namespace Assets.Scripts
 			{
 				this.CupLayer.transform.DestroyChildrenOnDelayCall();
 
-				if (this.ShowTestCubes)
+				if (this.ShowTestCubes && this.AtomCube != null)
 				{
-					if (this.AtomCube != null)
-					{
-						for (int y = 0; y < this.Height; y++)
-						{
-							for (int x = 0; x < this.Width; x++)
-							{
-								CreateRandomAtom(x, y, this.AtomCube, this.CupLayer, this.MaterialsScope);
-							}
-						}
-					}
+					this.FillTestCubes();
+				}
+			}
+		}
+
+		private void FillTestCubes()
+		{
+			for (int y = 0; y < this.Height; y++)
+			{
+				for (int x = 0; x < this.Width; x++)
+				{
+					CreateRandomAtom(x, y, this.AtomCube, this.CupLayer, this.MaterialsScope);
 				}
 			}
 		}
