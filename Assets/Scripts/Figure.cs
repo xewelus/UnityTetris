@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Assets.Interfaces;
 using UnityEditor;
@@ -9,10 +10,13 @@ using Point = System.Drawing.Point;
 namespace Assets.Scripts
 {
 	[Serializable]
-	public class Figure : MonoBehaviour, IOnValidate, IOnGUI, IStart, IUpdate
+	public class Figure : MonoBehaviour, IOnValidate
 	{
 		[DataMember]
-		public GameObject AtomCube;
+		public AtomCube AtomCube;
+
+		[NonSerialized]
+		public readonly List<AtomCube> Cubes = new List<AtomCube>();
 
 		[DataMember]
 		public readonly string Guid = System.Guid.NewGuid().ToString();
@@ -31,21 +35,6 @@ namespace Assets.Scripts
 		public Color Color = Color.white;
 
 		private bool wasOnValidate;
-
-		public void OnGUI()
-		{
-			// common GUI code goes here
-			Debug.Log("OnGui");
-
-			if (GUI.Button(new Rect(Random.Range(10, 600), 10, 150, 100), "I am a button " + Random.Range(0, 1)))
-			{
-				print("You clicked the button!");
-			}
-		}
-
-		public void Start()
-		{
-		}
 
 		public void OnValidate()
 		{
@@ -78,6 +67,14 @@ namespace Assets.Scripts
 			Debug.Log("Need regenerate " + this.name);
 
 			this.transform.DestroyChildrenOnDelayCall();
+			this.CreateCubes();
+
+			this.prevFigureAsset = this.FigureAsset;
+		}
+
+		public void CreateCubes()
+		{
+			this.Cubes.Clear();
 
 			if (this.FigureAsset == null)
 			{
@@ -88,18 +85,17 @@ namespace Assets.Scripts
 			{
 				this.CreateAtom(p);
 			}
-
-			this.prevFigureAsset = this.FigureAsset;
 		}
 
 		private void CreateAtom(Point p)
 		{
-			Vector3 localPoint = new Vector3(p.X, p.Y, 0);
+			Vector3 localPoint = new Vector3(p.X + 0.5f, p.Y + 0.5f, 0);
 			Vector3 point = this.transform.TransformPoint(localPoint);
 
-			GameObject atom = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);
+			AtomCube cube = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);
+			this.Cubes.Add(cube);
 
-			Renderer rndr = atom.GetComponent<Renderer>();
+			Renderer rndr = cube.GetComponent<Renderer>();
 
 			if (this.MaterialsScope != null)
 			{
@@ -114,11 +110,6 @@ namespace Assets.Scripts
 				rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
 				rndr.sharedMaterial.color = this.Color;
 			}
-		}
-
-		public void Update()
-		{
-			this.transform.Rotate(0.1f, 0f, 0f);
 		}
 	}
 }

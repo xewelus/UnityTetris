@@ -64,9 +64,12 @@
   <ItemGroup>
     <Compile Include="Assets\Helpers\CommonExtensions.cs" />
     <Compile Include="Assets\Interfaces\Interfaces.cs" />
+    <Compile Include="Assets\Scripts\AtomCube.cs" />
+    <Compile Include="Assets\Scripts\Engine\CubesArray.cs" />
     <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
+    <Compile Include="Assets\Scripts\FigureAssetScope.cs" />
     <Compile Include="Assets\Scripts\GameDesk.cs" />
     <Compile Include="Assets\Scripts\GameSystem.cs" />
     <Compile Include="Assets\Scripts\MaterialsScope.cs" />

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3437630943692563944}
   - component: {fileID: 3437630943692563951}
   - component: {fileID: 3437630943692563950}
+  - component: {fileID: 8311825053720976213}
   m_Layer: 0
   m_Name: AtomCube
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1bb6f0c5db46570408af89cd4ec12d2e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,3 +80,15 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &8311825053720976213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3437630943692563948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b758a396d7ed85e439cda67dc8ac3544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

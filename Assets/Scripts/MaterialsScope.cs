@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Assets.Interfaces;
-using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
@@ -80,6 +79,11 @@ namespace Assets.Scripts
 		public Material GetMaterial(int index)
 		{
 			return this.materials[index];
+		}
+
+		public Color GetRandomColor()
+		{
+			return this.Colors[UnityEngine.Random.Range(0, this.Colors.Count)];
 		}
 	}
 }

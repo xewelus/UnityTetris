@@ -1,11 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using Assets.Interfaces;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
-	public class GameDesk : MonoBehaviour, IOnValidate
+	public class GameDesk : MonoBehaviour, IOnValidate, IUpdate
 	{
 		[DataMember]
 		public int Width = 10;
@@ -14,10 +17,16 @@ namespace Assets.Scripts
 		public int Height = 20;
 
 		[DataMember]
-		public GameObject AtomCube;
+		public AtomCube AtomCube;
+
+		[DataMember]
+		public Figure Figure;
 
 		[DataMember]
 		public MaterialsScope MaterialsScope;
+
+		[DataMember]
+		public FigureAssetScope FigureAssetScope;
 
 		[DataMember]
 		public GameObject CupLayer;
@@ -27,6 +36,9 @@ namespace Assets.Scripts
 
 		[DataMember]
 		public bool ShowTestCubes;
+
+		[DataMember]
+		public float TimeInterval = 1f;
 
 		private bool isValidated;
 
@@ -65,12 +77,12 @@ namespace Assets.Scripts
 			}
 		}
 
-		private static void CreateRandomAtom(int x, int y, GameObject atomCube, GameObject cupLayer, MaterialsScope materialsScope)
+		private static void CreateRandomAtom(int x, int y, AtomCube atomCube, GameObject cupLayer, MaterialsScope materialsScope)
 		{
 			Vector3 localPoint = new Vector3(x + 0.5f, y + 0.5f, 0);
 			Vector3 point = cupLayer.transform.TransformPoint(localPoint);
 
-			GameObject atom = Instantiate(atomCube, point, Quaternion.identity, cupLayer.transform);
+			AtomCube atom = Instantiate(atomCube, point, Quaternion.identity, cupLayer.transform);
 
 			Renderer rndr = atom.GetComponent<Renderer>();
 
@@ -78,6 +90,50 @@ namespace Assets.Scripts
 			{
 				int color = Random.Range(0, materialsScope.Count);
 				rndr.sharedMaterial = materialsScope.GetMaterial(color);
+			}
+		}
+
+		private Figure currentFigure;
+		private float? lastTime;
+		public void Update()
+		{
+			if (this.FigureAssetScope == null) throw new NullReferenceException("FigureAssetScope");
+			if (this.Figure == null) throw new NullReferenceException("Figure");
+
+			float now = Time.time;
+			float? time = this.lastTime;
+			while (true)
+			{
+				if (time == null)
+				{
+					time = now;
+				}
+				else
+				{
+					time += this.TimeInterval;
+					if (time > now)
+					{
+						break;
+					}
+				}
+
+				if (this.currentFigure == null)
+				{
+					Vector3 localPoint = new Vector3Int(this.Width / 2, this.Height, 0);
+					Vector3 point = this.CupLayer.transform.TransformPoint(localPoint);
+					this.currentFigure = Instantiate(this.Figure, point, Quaternion.identity, this.CupLayer.transform);
+					this.currentFigure.Color = this.MaterialsScope.GetRandomColor();
+
+					FigureAsset figureAsset = this.FigureAssetScope.GetRandom();
+					this.currentFigure.FigureAsset = figureAsset;
+					this.currentFigure.CreateCubes();
+				}
+				else
+				{
+					this.currentFigure.transform.localPosition += new Vector3Int(0, -1, 0);
+				}
+
+				this.lastTime = time;
 			}
 		}
 	}
