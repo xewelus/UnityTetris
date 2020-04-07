@@ -32,6 +32,9 @@ namespace Assets.Scripts
 		private FigureAsset prevFigureAsset;
 
 		[DataMember]
+		public int RotationIndex;
+
+		[DataMember]
 		public Color Color = Color.white;
 
 		private bool wasOnValidate;
@@ -81,7 +84,11 @@ namespace Assets.Scripts
 				return;
 			}
 
-			foreach (Point p in this.FigureAsset.GetCells())
+			int rotationIndex;
+			Math.DivRem(this.RotationIndex, this.FigureAsset.Rotations.Count, out rotationIndex);
+			FigureAsset.Item item = this.FigureAsset.Rotations[rotationIndex];
+
+			foreach (Point p in item.GetCells()) 
 			{
 				this.CreateAtom(p);
 			}

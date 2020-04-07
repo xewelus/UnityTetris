@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6886297623436501829}
   - component: {fileID: 6886297623436501828}
   m_Layer: 0
-  m_Name: FigureAsset01
+  m_Name: FigureAsset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,10 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b72b906652542409b773eeb448c6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 3
-  Height: 3
+  Width: 0
+  Height: 0
   Rows:
-    List:
-    - Values: 000100
-    - Values: 010101
-    - Values: 000000
+    List: []

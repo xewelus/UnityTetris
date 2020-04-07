@@ -1,10 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-	[CustomPropertyDrawer(typeof(FigureAsset.RowList))]
+	[CustomPropertyDrawer(typeof(FigureAsset.Item))]
 	public class FigureAssetDrawer : PropertyDrawer
 	{
 		private const float ROW_HEIGHT = 20f;
@@ -21,31 +22,20 @@ namespace Assets.Scripts
 			{
 				EditorGUI.indentLevel = 0;
 
-				SerializedProperty listProperty = property.FindPropertyRelative(nameof(FigureAsset.RowList.List));
+				SerializedProperty listProperty = property.FindPropertyRelative(nameof(FigureAsset.Item.List));
 
-				int y = 0;
-				while (true)
+				for (int y = 0; y < listProperty.arraySize; y++)
 				{
 					SerializedProperty rowProperty = listProperty.GetArrayElementAtIndex(y);
-					if (rowProperty == null) break;
-
 					SerializedProperty valuesProperty = rowProperty.FindPropertyRelative(nameof(FigureAsset.Row.Values));
 
-					int x = 0;
-					while (true)
+					for (int x = 0; x < valuesProperty.arraySize; x++)
 					{
 						SerializedProperty valueProperty = valuesProperty.GetArrayElementAtIndex(x);
-						if (valueProperty == null) break;
 
 						Rect rect = new Rect(position.x + x * 20f, position.y + y * ROW_HEIGHT, 20f, ROW_HEIGHT);
 						EditorGUI.PropertyField(rect, valueProperty, GUIContent.none);
-
-						x++;
-						if (x >= valuesProperty.arraySize) break;
 					}
-
-					y++;
-					if (y >= listProperty.arraySize) break;
 				}
 			}
 			finally
@@ -58,17 +48,8 @@ namespace Assets.Scripts
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			SerializedProperty listProperty = property.FindPropertyRelative(nameof(FigureAsset.RowList.List));
-
-			int y = 0;
-			while (true)
-			{
-				SerializedProperty rowProperty = listProperty.GetArrayElementAtIndex(y);
-				if (rowProperty == null) break;
-				y++;
-				if (y >= listProperty.arraySize) break;
-			}
-			return y * ROW_HEIGHT;
+			SerializedProperty listProperty = property.FindPropertyRelative(nameof(FigureAsset.Item.List));
+			return Math.Max(1, listProperty.arraySize) * ROW_HEIGHT;
 		}
 	}
 }
