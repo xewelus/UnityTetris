@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Assets.Interfaces;
-using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using Point = System.Drawing.Point;
 
 namespace Assets.Scripts
 {
 	[Serializable]
-	public class Figure : MonoBehaviour, IOnValidate
+	public class Figure : MonoBehaviour
 	{
 		[DataMember]
 		public AtomCube AtomCube;
@@ -19,61 +16,13 @@ namespace Assets.Scripts
 		public readonly List<AtomCube> Cubes = new List<AtomCube>();
 
 		[DataMember]
-		public readonly string Guid = System.Guid.NewGuid().ToString();
-
-		[DataMember]
-		public bool EnableGeneration;
-
-		[DataMember]
-		public MaterialsScope MaterialsScope;
-
-		[DataMember]
 		public FigureAsset FigureAsset;
-		private FigureAsset prevFigureAsset;
 
 		[DataMember]
 		public int RotationIndex;
 
 		[DataMember]
 		public Color Color = Color.white;
-
-		private bool wasOnValidate;
-
-		public void OnValidate()
-		{
-			if (!this.wasOnValidate)
-			{
-				this.wasOnValidate = true;
-				this.prevFigureAsset = this.FigureAsset;
-			}
-
-			if (EditorApplication.isPlayingOrWillChangePlaymode)
-			{
-				return;  
-			}
-
-			if (!this.EnableGeneration)
-			{
-				return;
-			}
-
-			if (this.AtomCube == null)
-			{
-				return;
-			}
-
-			if (this.prevFigureAsset == this.FigureAsset)
-			{
-				return;
-			}
-
-			Debug.Log("Need regenerate " + this.name);
-
-			this.transform.DestroyChildrenOnDelayCall();
-			this.CreateCubes();
-
-			this.prevFigureAsset = this.FigureAsset;
-		}
 
 		public void CreateCubes()
 		{
@@ -103,20 +52,13 @@ namespace Assets.Scripts
 			this.Cubes.Add(cube);
 
 			Renderer rndr = cube.GetComponent<Renderer>();
+			this.SetMaterial(rndr);
+		}
 
-			if (this.MaterialsScope != null)
-			{
-				if (this.MaterialsScope.Count > 0)
-				{
-					int color = Random.Range(0, this.MaterialsScope.Count);
-					rndr.sharedMaterial = this.MaterialsScope.GetMaterial(color);
-				}
-			}
-			else
-			{
-				rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
-				rndr.sharedMaterial.color = this.Color;
-			}
+		protected virtual void SetMaterial(Renderer rndr)
+		{
+			rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
+			rndr.sharedMaterial.color = this.Color;
 		}
 	}
 }
