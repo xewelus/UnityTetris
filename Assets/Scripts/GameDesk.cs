@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Assets.Interfaces;
+using Assets.Scripts.Engine;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -93,43 +94,14 @@ namespace Assets.Scripts
 			}
 		}
 
-		private Figure.Info figureInfo;
-		private float? lastTime;
+		private GameLevel GameLevel;
 		public void Update()
 		{
-			if (this.FigureAssetScope == null) throw new NullReferenceException("FigureAssetScope");
-			if (this.Figure == null) throw new NullReferenceException("Figure");
-
-			float now = Time.time;
-			float? time = this.lastTime;
-			while (true)
+			if (this.GameLevel == null)
 			{
-				if (time == null)
-				{
-					time = now;
-				}
-				else
-				{
-					time += this.TimeInterval;
-					if (time > now)
-					{
-						break;
-					}
-				}
-
-				if (this.figureInfo == null)
-				{
-					Vector3Int localPoint = new Vector3Int(this.Width / 2, this.Height, 0);
-					Color color = this.MaterialsScope.GetRandomColor();
-					this.figureInfo = new Figure.Info(this.Figure, localPoint, this.CupLayer.transform, color, this.FigureAssetScope);
-				}
-				else
-				{
-					this.figureInfo.MoveDown();
-				}
-
-				this.lastTime = time;
+				this.GameLevel = new GameLevel(this);
 			}
+			this.GameLevel.Update();
 		}
 	}
 }

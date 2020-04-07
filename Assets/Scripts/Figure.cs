@@ -86,6 +86,12 @@ namespace Assets.Scripts
 				this.pos.y -= 1;
 				this.Figure.transform.localPosition = this.pos;
 			}
+
+			public void MoveSide(bool left)
+			{
+				this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
+				this.Figure.transform.localPosition = this.pos;
+			}
 		}
 	}
 }

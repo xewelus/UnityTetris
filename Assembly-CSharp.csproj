@@ -66,6 +66,8 @@
     <Compile Include="Assets\Interfaces\Interfaces.cs" />
     <Compile Include="Assets\Scripts\AtomCube.cs" />
     <Compile Include="Assets\Scripts\Engine\CubesArray.cs" />
+    <Compile Include="Assets\Scripts\Engine\GameLevel.cs" />
+    <Compile Include="Assets\Scripts\Engine\KeyboardController.cs" />
     <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />

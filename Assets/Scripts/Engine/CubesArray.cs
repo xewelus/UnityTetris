@@ -19,7 +19,7 @@ namespace Assets.Scripts
 
 		private class ItemInfo
 		{
-			public ItemType Type;
+			//public ItemType Type;
 		}
 	}
 }
