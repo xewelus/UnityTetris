@@ -93,7 +93,7 @@ namespace Assets.Scripts
 			}
 		}
 
-		private Figure currentFigure;
+		private Figure.Info figureInfo;
 		private float? lastTime;
 		public void Update()
 		{
@@ -117,20 +117,15 @@ namespace Assets.Scripts
 					}
 				}
 
-				if (this.currentFigure == null)
+				if (this.figureInfo == null)
 				{
-					Vector3 localPoint = new Vector3Int(this.Width / 2, this.Height, 0);
-					Vector3 point = this.CupLayer.transform.TransformPoint(localPoint);
-					this.currentFigure = Instantiate(this.Figure, point, Quaternion.identity, this.CupLayer.transform);
-					this.currentFigure.Color = this.MaterialsScope.GetRandomColor();
-
-					FigureAsset figureAsset = this.FigureAssetScope.GetRandom();
-					this.currentFigure.FigureAsset = figureAsset;
-					this.currentFigure.CreateCubes();
+					Vector3Int localPoint = new Vector3Int(this.Width / 2, this.Height, 0);
+					Color color = this.MaterialsScope.GetRandomColor();
+					this.figureInfo = new Figure.Info(this.Figure, localPoint, this.CupLayer.transform, color, this.FigureAssetScope);
 				}
 				else
 				{
-					this.currentFigure.transform.localPosition += new Vector3Int(0, -1, 0);
+					this.figureInfo.MoveDown();
 				}
 
 				this.lastTime = time;
