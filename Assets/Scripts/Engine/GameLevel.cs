@@ -72,12 +72,20 @@ namespace Assets.Scripts.Engine
 				}
 				else
 				{
-					this.figureInfo.MoveDown();
+					bool ok = this.figureInfo.MoveDown();
+					if (!ok)
+					{
+						this.figureInfo = null;
+					}
 				}
 
 				this.lastTime = time;
 			}
-			this.figureInfo.Update(this.timing);
+
+			if (this.figureInfo != null)
+			{
+				this.figureInfo.Update(this.timing);
+			}
 		}
 
 		private void Keyboard_MoveLeft()
