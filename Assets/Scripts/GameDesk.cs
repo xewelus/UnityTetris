@@ -1,10 +1,8 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Assets.Interfaces;
 using Assets.Scripts.Engine;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
@@ -12,7 +10,7 @@ namespace Assets.Scripts
 	public class GameDesk : MonoBehaviour, IOnValidate, IUpdate
 	{
 		[DataMember]
-		public GameParameters Parameters = new GameParameters();
+		public GameParameters Parameters;
 
 		[DataMember]
 		public int Width = 10;

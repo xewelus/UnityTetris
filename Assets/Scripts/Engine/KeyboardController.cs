@@ -6,20 +6,43 @@ namespace Assets.Scripts.Engine
 	public class KeyboardController
 	{
 		private readonly GameParameters.KeyboardParameters parameters;
+		private readonly Timing timing;
 
-		public event Action NeedLeft;
-		public event Action NeedRight;
+		public event Action MoveLeft;
+		public event Action MoveRight;
+		public event Action RotateLeft;
+		public event Action RotateRight;
+		public event Action Pause;
 
 		private float? lastMoveSideTime;
 		private bool? lastMoveSide;
 		private bool? lastPressed;
 
-		public KeyboardController(GameParameters.KeyboardParameters parameters)
+		public KeyboardController(GameParameters.KeyboardParameters parameters, Timing timing)
 		{
 			this.parameters = parameters;
+			this.timing = timing;
 		}
 
 		public void Update()
+		{
+			this.CheckMoveKeys();
+
+			if (Input.GetKey(this.parameters.RotateLeft))
+			{
+				this.RotateLeft?.Invoke();
+			}
+			if (Input.GetKey(this.parameters.RotateRight))
+			{
+				this.RotateRight?.Invoke();
+			}
+			if (Input.GetKey(this.parameters.Pause))
+			{
+				this.Pause?.Invoke();
+			}
+		}
+
+		private void CheckMoveKeys()
 		{
 			bool leftPressed = Input.GetKey(this.parameters.Left);
 			bool rightPressed = Input.GetKey(this.parameters.Right);
@@ -45,10 +68,10 @@ namespace Assets.Scripts.Engine
 
 			if (side != null)
 			{
-				Action action = side.Value ? this.NeedLeft : this.NeedRight;
+				Action action = side.Value ? this.MoveLeft : this.MoveRight;
 				if (action != null)
 				{
-					float now = Time.time;
+					float now = this.timing.time;
 					if (this.lastMoveSideTime == null || this.lastMoveSideTime.Value + this.parameters.MoveSideDelay < now)
 					{
 						this.lastMoveSideTime = now;

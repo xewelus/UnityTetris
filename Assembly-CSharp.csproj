@@ -10,8 +10,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{D2BFFF02-D087-DB1A-C7FE-6538A965A290}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -67,13 +66,15 @@
     <Compile Include="Assets\Interfaces\Interfaces.cs" />
     <Compile Include="Assets\Scripts\AtomCube.cs" />
     <Compile Include="Assets\Scripts\Engine\CubesArray.cs" />
+    <Compile Include="Assets\Scripts\Engine\FigureInfo.cs" />
     <Compile Include="Assets\Scripts\Engine\GameLevel.cs" />
     <Compile Include="Assets\Scripts\Engine\KeyboardController.cs" />
+    <Compile Include="Assets\Scripts\Engine\Timing.cs" />
+    <Compile Include="Assets\Scripts\Engine\TweenScaleFunctionsEnum.cs" />
     <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
     <Compile Include="Assets\Scripts\FigureAssetScope.cs" />
-    <Compile Include="Assets\Scripts\Engine\FigureInfo.cs" />
     <Compile Include="Assets\Scripts\GameDesk.cs" />
     <Compile Include="Assets\Scripts\GameParameters.cs" />
     <Compile Include="Assets\Scripts\GameSystem.cs" />

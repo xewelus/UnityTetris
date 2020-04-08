@@ -50,3 +50,7 @@ MonoBehaviour:
     RotateLeft: 273
     RotateRight: 32
     Down: 274
+    Pause: 19
+  FigureRotation:
+    Time: 0.1
+    Tween: 15

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Assets.Scripts.Engine;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -8,7 +9,10 @@ namespace Assets.Scripts
 	public class GameParameters : MonoBehaviour
 	{
 		[DataMember]
-		public KeyboardParameters Keyboard = new KeyboardParameters();
+		public KeyboardParameters Keyboard;
+
+		[DataMember]
+		public FigureRotationParameters FigureRotation;
 
 		[Serializable]
 		public class KeyboardParameters
@@ -30,6 +34,19 @@ namespace Assets.Scripts
 
 			[DataMember]
 			public KeyCode Down = KeyCode.DownArrow;
+
+			[DataMember]
+			public KeyCode Pause = KeyCode.Pause;
+		}
+
+		[Serializable]
+		public class FigureRotationParameters
+		{
+			[DataMember]
+			public float Time = 0.1f;
+
+			[DataMember]
+			public TweenScaleFunctionsEnum Tween = TweenScaleFunctionsEnum.SineEaseInOut;
 		}
 	}
 }
