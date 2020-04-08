@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\AtomCube.cs" />
     <Compile Include="Assets\Scripts\Engine\CubesArray.cs" />
     <Compile Include="Assets\Scripts\Engine\FigureInfo.cs" />
+    <Compile Include="Assets\Scripts\Engine\GameLevel.KeyboardEvents.cs" />
     <Compile Include="Assets\Scripts\Engine\GameLevel.cs" />
     <Compile Include="Assets\Scripts\Engine\KeyboardController.cs" />
     <Compile Include="Assets\Scripts\Engine\Timing.cs" />

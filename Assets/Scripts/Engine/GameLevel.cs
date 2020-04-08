@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Engine
 {
-	public class GameLevel
+	public partial class GameLevel
 	{
 		private readonly GameDesk gameDesk;
 		private FigureInfo figureInfo;
@@ -22,11 +22,7 @@ namespace Assets.Scripts.Engine
 			if (gameDesk.Parameters.Keyboard == null) throw new Exception("gameDesk.Parameters.Keyboard");
 
 			this.keyboard = new KeyboardController(gameDesk.Parameters.Keyboard, this.timing);
-			this.keyboard.MoveLeft += this.Keyboard_MoveLeft;
-			this.keyboard.MoveRight += this.Keyboard_MoveRight;
-			this.keyboard.RotateLeft += this.Keyboard_RotateLeft;
-			this.keyboard.RotateRight += this.Keyboard_RotateRight;
-			this.keyboard.Pause += this.Keyboard_Pause;
+			KeyboardEvents.Init(this, this.keyboard);
 		}
 
 		public void Update()
@@ -86,43 +82,6 @@ namespace Assets.Scripts.Engine
 			{
 				this.figureInfo.Update(this.timing);
 			}
-		}
-
-		private void Keyboard_MoveLeft()
-		{
-			if (this.figureInfo != null)
-			{
-				this.figureInfo.MoveSide(true);
-			}
-		}
-
-		private void Keyboard_MoveRight()
-		{
-			if (this.figureInfo != null)
-			{
-				this.figureInfo.MoveSide(false);
-			}
-		}
-
-		private void Keyboard_RotateLeft()
-		{
-			if (this.figureInfo != null)
-			{
-				this.figureInfo.Rotate(true);
-			}
-		}
-
-		private void Keyboard_RotateRight()
-		{
-			if (this.figureInfo != null)
-			{
-				this.figureInfo.Rotate(false);
-			}
-		}
-
-		private void Keyboard_Pause()
-		{
-			this.timing.IsPaused = !this.timing.IsPaused;
 		}
 	}
 }
