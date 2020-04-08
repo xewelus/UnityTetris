@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Engine\KeyboardController.cs" />
     <Compile Include="Assets\Scripts\Engine\Timing.cs" />
     <Compile Include="Assets\Scripts\Engine\TweenScaleFunctionsEnum.cs" />
+    <Compile Include="Assets\Scripts\Engine\Util.cs" />
     <Compile Include="Assets\Scripts\Figure.cs" />
     <Compile Include="Assets\Scripts\FigureAsset.cs" />
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
