@@ -10,7 +10,7 @@ namespace Assets.Scripts.Engine
 
 		private float? lastMoveSideTime;
 		private Side? lastMoveSide;
-		private Pressed? lastPressed;
+		private Side? lastPressed;
 		private float moveSideDelay = 0.2f;
 
 		public void Update()
@@ -19,33 +19,15 @@ namespace Assets.Scripts.Engine
 			bool rightPressed = Input.GetKey(KeyCode.RightArrow);
 
 			Side? side = null;
-			Pressed? pressed = null;
+			Side? pressed = null;
 
 			if (leftPressed && rightPressed)
 			{
-				pressed = Pressed.Both;
-			}
-			else if (leftPressed)
-			{
-				pressed = Pressed.Left;
-			}
-			else if (rightPressed)
-			{
-				pressed = Pressed.Right;
-			}
-
-			if (leftPressed ^ rightPressed)
-			{
-				side = leftPressed ? Side.Left : Side.Right;
-			}
-			else if (pressed == Pressed.Both)
-			{
-				// обе нажаты
-				if (this.lastPressed == Pressed.Left)
+				if (this.lastPressed == Side.Left)
 				{
 					side = Side.Right;
 				}
-				else if (this.lastPressed == Pressed.Right)
+				else if (this.lastPressed == Side.Right)
 				{
 					side = Side.Left;
 				}
@@ -54,13 +36,22 @@ namespace Assets.Scripts.Engine
 					side = this.lastMoveSide;
 				}
 			}
+			else if (leftPressed)
+			{
+				pressed = Side.Left;
+				side = Side.Left;
+			}
+			else if (rightPressed)
+			{
+				pressed = Side.Right;
+				side = Side.Right;
+			}
 
 			if (this.lastPressed != pressed)
 			{
 				this.lastMoveSideTime = null;
+				this.lastPressed = pressed;
 			}
-
-			this.lastPressed = pressed;
 
 			if (side != null)
 			{
@@ -76,13 +67,6 @@ namespace Assets.Scripts.Engine
 					}
 				}
 			}
-		}
-
-		private enum Pressed
-		{
-			Left,
-			Right,
-			Both
 		}
 
 		private enum Side
