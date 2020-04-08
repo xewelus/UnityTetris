@@ -45,20 +45,14 @@ namespace Assets.Scripts
 					material = this.materials[i];
 					if (material == null)
 					{
-						material = Instantiate(this.Material);
+						material = Cache.Default.GetOrCreate(color, this.Material);
 						this.materials[i] = material;
 					}
 				}
 				else
 				{
-					material = Instantiate(this.Material);
+					material = Cache.Default.GetOrCreate(color, this.Material);
 					this.materials.Add(material);
-				}
-
-				if (material.color != color)
-				{
-					material.color = color;
-					material.name = ColorUtility.ToHtmlStringRGB(color);
 				}
 			}
 
@@ -84,6 +78,42 @@ namespace Assets.Scripts
 		public Color GetRandomColor()
 		{
 			return this.Colors[UnityEngine.Random.Range(0, this.Colors.Count)];
+		}
+
+		public class Cache
+		{
+			public static readonly Cache Default = new Cache();
+			private readonly Dictionary<Key, Material> materials = new Dictionary<Key, Material>();
+
+			public Material GetOrCreate(Color color, Material sample)
+			{
+				Key key = new Key(color, sample);
+				lock (this.materials)
+				{
+					Material material;
+					if (!this.materials.TryGetValue(key, out material))
+					{
+						material = Instantiate(sample);
+						material.name = ColorUtility.ToHtmlStringRGB(color);
+						this.materials.Add(key, material);
+					}
+					return material;
+				}
+			}
+
+			private struct Key
+			{
+				[DataMember]
+				public Color Color;
+				[DataMember]
+				public Material Sample;
+
+				public Key(Color color, Material sample)
+				{
+					this.Color = color;
+					this.Sample = sample;
+				}
+			}
 		}
 	}
 }
