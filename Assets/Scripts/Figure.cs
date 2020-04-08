@@ -37,7 +37,7 @@ namespace Assets.Scripts
 			Math.DivRem(this.RotationIndex, this.FigureAsset.Rotations.Count, out rotationIndex);
 			FigureAsset.Item item = this.FigureAsset.Rotations[rotationIndex];
 
-			foreach (Point p in item.GetCells()) 
+			foreach (Point p in item.GetCells())
 			{
 				this.CreateAtom(p);
 			}
@@ -59,39 +59,6 @@ namespace Assets.Scripts
 		{
 			rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
 			rndr.sharedMaterial.color = this.Color;
-		}
-
-		public class Info
-		{
-			private readonly Figure Figure;
-			private Vector3Int pos;
-			public Info(Figure sample, Vector3Int localPoint, Transform transform, Color color, FigureAssetScope figureAssetScope)
-			{
-				this.pos = localPoint;
-
-				FigureAsset figureAsset = figureAssetScope.GetRandom();
-				this.pos.y -= figureAsset.Height;
-
-				Vector3 point = transform.TransformPoint(this.pos);
-				Figure figure = Instantiate(sample, point, Quaternion.identity, transform);
-				figure.Color = color;
-
-				figure.FigureAsset = figureAsset;
-				figure.CreateCubes();
-				this.Figure = figure;
-			}
-
-			public void MoveDown()
-			{
-				this.pos.y -= 1;
-				this.Figure.transform.localPosition = this.pos;
-			}
-
-			public void MoveSide(bool left)
-			{
-				this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
-				this.Figure.transform.localPosition = this.pos;
-			}
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace Assets.Scripts.Engine
 	public class GameLevel
 	{
 		private readonly GameDesk gameDesk;
-		private Figure.Info figureInfo;
+		private FigureInfo figureInfo;
 		private float? lastTime;
 		private readonly KeyboardController keyboard;
 
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Engine
 				{
 					Vector3Int localPoint = new Vector3Int(this.gameDesk.Width / 2, this.gameDesk.Height, 0);
 					Color color = this.gameDesk.MaterialsScope.GetRandomColor();
-					this.figureInfo = new Figure.Info(
+					this.figureInfo = new FigureInfo(
 						sample: this.gameDesk.Figure,
 						localPoint: localPoint, 
 						transform: this.gameDesk.CupLayer.transform,
