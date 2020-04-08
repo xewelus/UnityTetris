@@ -83,7 +83,7 @@ namespace Assets.Scripts
 				}
 			}
 
-			public IEnumerable<Point> GetCells()
+			public IEnumerable<Vector2Int> GetCells()
 			{
 				for (int y = 0; y < this.List.Count; y++)
 				{
@@ -93,10 +93,26 @@ namespace Assets.Scripts
 						bool value = row.Values[x];
 						if (value)
 						{
-							yield return new Point(x, y);
+							yield return new Vector2Int(x, y);
 						}
 					}
 				}
+			}
+
+			public Vector2 GetCenter()
+			{
+				Vector2Int? min = null;
+				Vector2Int? max = null;
+				foreach (Vector2Int point in this.GetCells())
+				{
+					if (min == null) min = point;
+					if (max == null) max = point;
+					min = new Vector2Int(Math.Min(min.Value.x, point.x), Math.Min(min.Value.y, point.y));
+					max = new Vector2Int(Math.Max(max.Value.x, point.x), Math.Max(max.Value.y, point.y));
+				}
+				if (min == null || max == null) throw new Exception("min == null || max == null");
+				Vector2 p = (Vector2.one + max.Value - min.Value) / 2f + min.Value;
+				return p;
 			}
 		}
 

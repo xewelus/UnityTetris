@@ -57,7 +57,7 @@ namespace Assets.Scripts
 			this.prevFigureAsset = this.FigureAsset;
 		}
 
-		protected override void SetMaterial(Renderer rndr)
+		protected override void SetMaterial(Renderer rndr, Color? color = null)
 		{
 			if (this.MaterialsScope == null)
 			{
@@ -67,8 +67,8 @@ namespace Assets.Scripts
 
 			if (this.MaterialsScope.Count > 0)
 			{
-				int color = Random.Range(0, this.MaterialsScope.Count);
-				rndr.sharedMaterial = this.MaterialsScope.GetMaterial(color);
+				int colorInt = Random.Range(0, this.MaterialsScope.Count);
+				rndr.sharedMaterial = this.MaterialsScope.GetMaterial(colorInt);
 			}
 		}
 	}

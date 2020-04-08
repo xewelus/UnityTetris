@@ -52,5 +52,7 @@ MonoBehaviour:
     Down: 274
     Pause: 19
   FigureRotation:
-    Time: 0.1
+    Time: 1
     Tween: 15
+  Test:
+    Arround: {x: 0, y: 0, z: 0}

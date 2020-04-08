@@ -25,8 +25,7 @@ namespace Assets.Scripts.Engine
 			FigureAsset figureAsset = figureAssetScope.GetRandom();
 			this.pos.y -= figureAsset.Height;
 
-			Vector3 point = transform.TransformPoint(this.pos);
-			Figure figure = GameObject.Instantiate(sample, point, Quaternion.identity, transform);
+			Figure figure = Util.CreateLocal(sample, transform, this.pos);
 			figure.Color = color;
 
 			figure.FigureAsset = figureAsset;
@@ -34,16 +33,22 @@ namespace Assets.Scripts.Engine
 			this.Figure = figure;
 		}
 
-		public void MoveDown()
+		private void UpdatePos()
+		{
+			this.Figure.transform.localPosition = this.pos;
+		}
+
+		public bool MoveDown()
 		{
 			this.pos.y -= 1;
-			this.Figure.transform.localPosition = this.pos;
+			this.UpdatePos();
+			return this.pos.y >= 0;
 		}
 
 		public void MoveSide(bool left)
 		{
 			this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
-			this.Figure.transform.localPosition = this.pos;
+			this.UpdatePos();
 		}
 
 		public void Rotate(bool left)
@@ -75,12 +80,6 @@ namespace Assets.Scripts.Engine
 			{
 				Transform transform = figure.transform;
 
-				void RotateAction(ITween<float> t)
-				{
-					transform.rotation = Quaternion.identity;
-					transform.Rotate(new Vector3(0, 0, 1f), t.CurrentValue);
-				}
-
 				float startAngle = transform.rotation.eulerAngles.z;
 				float endAngle = startAngle + 90f * multiplier;
 
@@ -90,7 +89,7 @@ namespace Assets.Scripts.Engine
 					end: endAngle, 
 					duration: parameters.Time, 
 					scaleFunc: parameters.Tween.ToFunction(),
-					progress: RotateAction, 
+					progress: t => transform.localRotation = Quaternion.AngleAxis(t.CurrentValue, Vector3.forward), 
 					completion: this.OnComplete);
 			}
 

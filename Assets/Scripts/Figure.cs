@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Assets.Scripts.Engine;
 using UnityEngine;
-using Point = System.Drawing.Point;
 
 namespace Assets.Scripts
 {
@@ -28,37 +28,50 @@ namespace Assets.Scripts
 		{
 			this.Cubes.Clear();
 
-			if (this.FigureAsset == null)
-			{
-				return;
-			}
+			if (this.FigureAsset == null) return;
 
-			int rotationIndex;
-			Math.DivRem(this.RotationIndex, this.FigureAsset.Rotations.Count, out rotationIndex);
-			FigureAsset.Item item = this.FigureAsset.Rotations[rotationIndex];
-
-			foreach (Point p in item.GetCells())
+			List<Vector2> posList = this.GetCubesPositions();
+			foreach (Vector2 p in posList)
 			{
 				this.CreateAtom(p);
 			}
 		}
 
-		private void CreateAtom(Point p)
+		public List<Vector2> GetCubesPositions()
 		{
-			Vector3 localPoint = new Vector3(p.X + 0.5f, p.Y + 0.5f, 0);
-			Vector3 point = this.transform.TransformPoint(localPoint);
+			FigureAsset.Item item = this.GetFigureAssetItem();
+			Vector2 center = item.GetCenter();
 
-			AtomCube cube = Instantiate(this.AtomCube, point, Quaternion.identity, this.transform);
+			List<Vector2> list = new List<Vector2>();
+			foreach (Vector2Int point in item.GetCells())
+			{
+				Vector2 p = point - center + Vector2.one * 0.5f;
+				list.Add(p);
+			}
+			return list;
+		}
+
+		public FigureAsset.Item GetFigureAssetItem()
+		{
+			int rotationIndex;
+			Math.DivRem(this.RotationIndex, this.FigureAsset.Rotations.Count, out rotationIndex);
+			FigureAsset.Item item = this.FigureAsset.Rotations[rotationIndex];
+			return item;
+		}
+
+		private void CreateAtom(Vector2 p, Color? color = null)
+		{
+			AtomCube cube = Util.CreateLocal(this.AtomCube, this.transform, p);
 			this.Cubes.Add(cube);
 
 			Renderer rndr = cube.GetComponent<Renderer>();
-			this.SetMaterial(rndr);
+			this.SetMaterial(rndr, color);
 		}
 
-		protected virtual void SetMaterial(Renderer rndr)
+		protected virtual void SetMaterial(Renderer rndr, Color? color = null)
 		{
 			rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
-			rndr.sharedMaterial.color = this.Color;
+			rndr.sharedMaterial.color = color ?? this.Color;
 		}
 	}
 }
