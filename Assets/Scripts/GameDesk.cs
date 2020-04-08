@@ -12,6 +12,9 @@ namespace Assets.Scripts
 	public class GameDesk : MonoBehaviour, IOnValidate, IUpdate
 	{
 		[DataMember]
+		public GameParameters Parameters = new GameParameters();
+
+		[DataMember]
 		public int Width = 10;
 
 		[DataMember]

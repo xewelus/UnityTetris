@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\FigureAssetDrawer.cs" />
     <Compile Include="Assets\Scripts\FigureAssetScope.cs" />
     <Compile Include="Assets\Scripts\GameDesk.cs" />
+    <Compile Include="Assets\Scripts\GameParameters.cs" />
     <Compile Include="Assets\Scripts\GameSystem.cs" />
     <Compile Include="Assets\Scripts\MaterialsScope.cs" />
     <Compile Include="Assets\Scripts\TestFigure.cs" />

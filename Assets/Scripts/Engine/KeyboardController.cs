@@ -5,18 +5,24 @@ namespace Assets.Scripts.Engine
 {
 	public class KeyboardController
 	{
+		private readonly GameParameters.KeyboardParameters parameters;
+
 		public event Action NeedLeft;
 		public event Action NeedRight;
 
 		private float? lastMoveSideTime;
 		private bool? lastMoveSide;
 		private bool? lastPressed;
-		private float moveSideDelay = 0.2f;
+
+		public KeyboardController(GameParameters.KeyboardParameters parameters)
+		{
+			this.parameters = parameters;
+		}
 
 		public void Update()
 		{
-			bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
-			bool rightPressed = Input.GetKey(KeyCode.RightArrow);
+			bool leftPressed = Input.GetKey(this.parameters.Left);
+			bool rightPressed = Input.GetKey(this.parameters.Right);
 
 			bool? side = null;
 			bool? pressed = null;
@@ -43,7 +49,7 @@ namespace Assets.Scripts.Engine
 				if (action != null)
 				{
 					float now = Time.time;
-					if (this.lastMoveSideTime == null || this.lastMoveSideTime.Value + this.moveSideDelay < now)
+					if (this.lastMoveSideTime == null || this.lastMoveSideTime.Value + this.parameters.MoveSideDelay < now)
 					{
 						this.lastMoveSideTime = now;
 						this.lastMoveSide = side;
@@ -51,12 +57,6 @@ namespace Assets.Scripts.Engine
 					}
 				}
 			}
-		}
-
-		private enum Side
-		{
-			Left,
-			Right
 		}
 	}
 }

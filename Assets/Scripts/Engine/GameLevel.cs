@@ -8,11 +8,16 @@ namespace Assets.Scripts.Engine
 		private readonly GameDesk gameDesk;
 		private Figure.Info figureInfo;
 		private float? lastTime;
-		private readonly KeyboardController keyboard = new KeyboardController();
+		private readonly KeyboardController keyboard;
 
 		public GameLevel(GameDesk gameDesk)
 		{
 			this.gameDesk = gameDesk;
+
+			if (gameDesk.Parameters == null) throw new Exception("gameDesk.Parameters");
+			if (gameDesk.Parameters.Keyboard == null) throw new Exception("gameDesk.Parameters.Keyboard");
+
+			this.keyboard = new KeyboardController(gameDesk.Parameters.Keyboard);
 			this.keyboard.NeedLeft += this.Keyboard_NeedLeft;
 			this.keyboard.NeedRight += this.Keyboard_NeedRight;
 		}

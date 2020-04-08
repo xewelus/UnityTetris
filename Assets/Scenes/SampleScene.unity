@@ -935,6 +935,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b4e6528fb6fdc42818962c196b2e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Parameters: {fileID: 2517587628174848914, guid: 71aa27f3dcc2be24d9730d9fbde84b85,
+    type: 3}
   Width: 10
   Height: 20
   AtomCube: {fileID: 8311825053720976213, guid: e627f064a09788f4096d78ed8057fc1d,
