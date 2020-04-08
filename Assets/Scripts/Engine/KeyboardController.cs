@@ -9,8 +9,8 @@ namespace Assets.Scripts.Engine
 		public event Action NeedRight;
 
 		private float? lastMoveSideTime;
-		private Side? lastMoveSide;
-		private Side? lastPressed;
+		private bool? lastMoveSide;
+		private bool? lastPressed;
 		private float moveSideDelay = 0.2f;
 
 		public void Update()
@@ -18,33 +18,17 @@ namespace Assets.Scripts.Engine
 			bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
 			bool rightPressed = Input.GetKey(KeyCode.RightArrow);
 
-			Side? side = null;
-			Side? pressed = null;
+			bool? side = null;
+			bool? pressed = null;
 
 			if (leftPressed && rightPressed)
 			{
-				if (this.lastPressed == Side.Left)
-				{
-					side = Side.Right;
-				}
-				else if (this.lastPressed == Side.Right)
-				{
-					side = Side.Left;
-				}
-				else
-				{
-					side = this.lastMoveSide;
-				}
+				side = !this.lastPressed ?? this.lastMoveSide;
 			}
-			else if (leftPressed)
+			else if (leftPressed || rightPressed)
 			{
-				pressed = Side.Left;
-				side = Side.Left;
-			}
-			else if (rightPressed)
-			{
-				pressed = Side.Right;
-				side = Side.Right;
+				pressed = leftPressed;
+				side = leftPressed;
 			}
 
 			if (this.lastPressed != pressed)
@@ -55,7 +39,7 @@ namespace Assets.Scripts.Engine
 
 			if (side != null)
 			{
-				Action action = side == Side.Left ? this.NeedLeft : this.NeedRight;
+				Action action = side.Value ? this.NeedLeft : this.NeedRight;
 				if (action != null)
 				{
 					float now = Time.time;
