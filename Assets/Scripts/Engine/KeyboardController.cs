@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Engine
@@ -11,7 +7,6 @@ namespace Assets.Scripts.Engine
 	{
 		public event Action NeedLeft;
 		public event Action NeedRight;
-		public event Action NeedDown;
 
 		private float? lastMoveSideTime;
 		private Side? lastMoveSide;
@@ -23,9 +18,8 @@ namespace Assets.Scripts.Engine
 			bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
 			bool rightPressed = Input.GetKey(KeyCode.RightArrow);
 
-			Side? side;
-			bool instant;
-			Pressed? pressed;
+			Side? side = null;
+			Pressed? pressed = null;
 
 			if (leftPressed && rightPressed)
 			{
@@ -39,65 +33,34 @@ namespace Assets.Scripts.Engine
 			{
 				pressed = Pressed.Right;
 			}
-			else
-			{
-				pressed = null;
-			}
 
-			if (this.lastPressed == null)
+			if (leftPressed ^ rightPressed)
 			{
-				instant = true;
-				if (leftPressed ^ rightPressed)
+				side = leftPressed ? Side.Left : Side.Right;
+			}
+			else if (pressed == Pressed.Both)
+			{
+				// обе нажаты
+				if (this.lastPressed == Pressed.Left)
 				{
-					// что-то одно стало нажато
-					side = leftPressed ? Side.Left : Side.Right;
+					side = Side.Right;
+				}
+				else if (this.lastPressed == Pressed.Right)
+				{
+					side = Side.Left;
 				}
 				else
 				{
-					side = null;
-				}
-			}
-			else
-			{
-				if (leftPressed ^ rightPressed)
-				{
-					// что-то одно до сих пор нажато
-					side = leftPressed ? Side.Left : Side.Right;
-					instant = this.lastPressed != pressed;
-				}
-				else if (leftPressed)
-				{
-					// обе нажаты
-					if (this.lastPressed == Pressed.Left)
-					{
-						side = Side.Right;
-						instant = true;
-					}
-					else if (this.lastPressed == Pressed.Right)
-					{
-						side = Side.Left;
-						instant = true;
-					}
-					else
-					{
-						side = this.lastMoveSide;
-						instant = false;
-					}
-				}
-				else
-				{
-					// ничего не нажато
-					side = null;
-					instant = true;
+					side = this.lastMoveSide;
 				}
 			}
 
-			this.lastPressed = pressed;
-
-			if (instant)
+			if (this.lastPressed != pressed)
 			{
 				this.lastMoveSideTime = null;
 			}
+
+			this.lastPressed = pressed;
 
 			if (side != null)
 			{
