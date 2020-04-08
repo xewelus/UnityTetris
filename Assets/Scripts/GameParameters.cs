@@ -14,6 +14,9 @@ namespace Assets.Scripts
 		[DataMember]
 		public FigureRotationParameters FigureRotation;
 
+		[DataMember]
+		public TestParameters Test;
+
 		[Serializable]
 		public class KeyboardParameters
 		{
@@ -47,6 +50,20 @@ namespace Assets.Scripts
 
 			[DataMember]
 			public TweenScaleFunctionsEnum Tween = TweenScaleFunctionsEnum.SineEaseInOut;
+		}
+	}
+
+	[Serializable]
+	public class TestParameters
+	{
+		public static TestParameters Current;
+
+		[DataMember]
+		public Vector3 Arround;
+
+		public TestParameters()
+		{
+			Current = this;
 		}
 	}
 }
