@@ -31,5 +31,10 @@ namespace Assets
 		{
 			return new Vector3Int(v.x, v.y, 0);
 		}
+
+		public static bool Contains(this RectInt rect, RectInt r)
+		{
+			return rect.Contains(r.min) && rect.Contains(r.max);
+		}
 	}
 }

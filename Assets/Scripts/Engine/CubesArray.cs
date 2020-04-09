@@ -8,12 +8,15 @@ namespace Assets.Scripts.Engine
 	{
 		private readonly List<Row> Rows = new List<Row>();
 		private readonly List<Cell> figureCells = new List<Cell>();
+		private readonly RectInt bounds;
 
 		public delegate void CellChangedDelegate(CellChangedEventArgs e);
 		public event CellChangedDelegate CellChanged;
 
 		public CubesArray(int width, int height)
 		{
+			this.bounds = new RectInt(0, 0, width, height);
+
 			for (int y = 0; y < height; y++)
 			{
 				Row row = new Row();
@@ -49,6 +52,18 @@ namespace Assets.Scripts.Engine
 				this.SetCell(cell.Point, CellType.None);
 			}
 			this.figureCells.Clear();
+		}
+
+		public bool CheckFigure(RotationInfo rotationInfo, Vector2Int newPos)
+		{
+			RectInt rect = rotationInfo.Bounds;
+			rect.x += newPos.x;
+			rect.y += newPos.y;
+			if (this.bounds.Contains(rect))
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private Cell GetCell(Vector2Int point)

@@ -75,10 +75,10 @@ namespace Assets.Scripts.Engine
 
 		public void MoveSide(bool left)
 		{
-			int newX = left ? this.pos.x - 1 : this.pos.x + 1;
-			if (newX + this.rotationInfo.Bounds.x >= 0 && newX + this.rotationInfo.Bounds.xMax < this.size.x)
+			Vector2Int newPos = this.pos + (left ? Vector2Int.left : Vector2Int.right);
+			if (this.cubesArray.CheckFigure(this.rotationInfo, newPos))
 			{
-				this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
+				this.pos = newPos;
 				this.UpdatePos();
 			}
 		}
