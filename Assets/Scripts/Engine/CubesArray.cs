@@ -8,14 +8,14 @@ namespace Assets.Scripts.Engine
 	{
 		private readonly List<Row> Rows = new List<Row>();
 		private readonly List<Cell> figureCells = new List<Cell>();
-		private readonly RectInt bounds;
+		public readonly RectInt Bounds;
 
 		public delegate void CellChangedDelegate(CellChangedEventArgs e);
 		public event CellChangedDelegate CellChanged;
 
 		public CubesArray(int width, int height)
 		{
-			this.bounds = new RectInt(0, 0, width, height);
+			this.Bounds = new RectInt(0, 0, width, height);
 
 			for (int y = 0; y < height; y++)
 			{
@@ -30,15 +30,15 @@ namespace Assets.Scripts.Engine
 			}
 		}
 
-		public void SetFigure(RotationInfo figureAsset, Vector2Int point)
+		public void SetFigure(RotationInfo figureAsset, Vector2Int point, bool isFixed)
 		{
 			this.RemoveFigure();
 
 			foreach (Vector2Int p in figureAsset.Points0)
 			{
 				Vector2Int pp = p + point;
-				Cell cell = this.SetCell(pp, CellType.Figure);
-				if (cell != null)
+				Cell cell = this.SetCell(pp, isFixed ? CellType.Fixed : CellType.Figure);
+				if (!isFixed && cell != null)
 				{
 					this.figureCells.Add(cell);
 				}
@@ -54,16 +54,31 @@ namespace Assets.Scripts.Engine
 			this.figureCells.Clear();
 		}
 
-		public bool CheckFigure(RotationInfo rotationInfo, Vector2Int newPos)
+		public bool CheckFigure(RotationInfo rotationInfo, Vector2Int newPos, bool checkCells)
 		{
 			RectInt rect = rotationInfo.Bounds;
-			rect.x += newPos.x;
-			rect.y += newPos.y;
-			if (this.bounds.Contains(rect))
+			rect = rect.Offset(newPos);
+			if (!this.Bounds.Contains(rect))
 			{
-				return true;
+				return false;
 			}
-			return false;
+
+			if (checkCells)
+			{
+				foreach (Vector2Int point in rotationInfo.Points0)
+				{
+					Vector2Int p = point + newPos;
+					Cell cell = this.GetCell(p);
+					if (cell == null) continue;
+
+					if (cell.Type == CellType.Fixed)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		private Cell GetCell(Vector2Int point)

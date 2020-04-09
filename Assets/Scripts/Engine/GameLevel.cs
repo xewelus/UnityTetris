@@ -64,7 +64,6 @@ namespace Assets.Scripts.Engine
 					Color color = this.gameDesk.MaterialsScope.GetRandomColor();
 					this.figureInfo = new FigureInfo(
 						sample: this.gameDesk.Figure,
-						size: new Vector2Int(this.gameDesk.Width, this.gameDesk.Height), 
 						localPoint: localPoint,
 						transform: this.gameDesk.CupLayer.transform,
 						color: color,
@@ -74,7 +73,7 @@ namespace Assets.Scripts.Engine
 				}
 				else
 				{
-					bool ok = this.figureInfo.MoveDown();
+					bool ok = this.figureInfo.MoveDown(true);
 					if (!ok)
 					{
 						this.figureInfo = null;

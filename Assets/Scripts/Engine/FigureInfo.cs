@@ -10,13 +10,11 @@ namespace Assets.Scripts.Engine
 		private readonly Figure Figure;
 		private readonly GameParameters parameters;
 		private readonly CubesArray cubesArray;
-		private readonly Vector2Int size;
 		private Vector2Int pos;
 		private RotateAction rotateAction;
 		private RotationInfo rotationInfo;
 		public FigureInfo(
 			Figure sample,
-			Vector2Int size,
 			Vector2Int localPoint,
 			Transform transform, 
 			Color color, 
@@ -27,11 +25,9 @@ namespace Assets.Scripts.Engine
 			this.parameters = parameters;
 			this.cubesArray = cubesArray;
 
-			this.size = size;
 			this.pos = localPoint;
 
 			FigureAsset figureAsset = figureAssetScope.GetRandom();
-			this.pos.y -= figureAsset.Height;
 
 			Figure figure = Util.CreateLocal(sample, transform, this.pos.ToVector3Int());
 			figure.Color = color;
@@ -42,6 +38,8 @@ namespace Assets.Scripts.Engine
 
 			List<Vector2> points = figureAsset.GetCubesPositions(0);
 			this.rotationInfo = RotationInfo.Create(points);
+
+			this.CheckStartPosition();
 
 			this.UpdatePos();
 		}
@@ -63,20 +61,43 @@ namespace Assets.Scripts.Engine
 
 		private void UpdateCubeArray()
 		{
-			this.cubesArray.SetFigure(this.rotationInfo, this.pos);
+			this.cubesArray.SetFigure(this.rotationInfo, this.pos, false);
 		}
 
-		public bool MoveDown()
+		private void CheckStartPosition()
 		{
-			this.pos.y -= 1;
-			this.UpdatePos();
-			return this.pos.y >= 0;
+			for (int i = 0; i < this.cubesArray.Bounds.height; i++)
+			{
+				bool ok = this.MoveDown(false);
+				if (ok) break;
+			}
+		}
+
+		public bool MoveDown(bool needFix)
+		{
+			Vector2Int newPos = this.pos + Vector2Int.down;
+			if (this.cubesArray.CheckFigure(this.rotationInfo, newPos, needFix))
+			{
+				this.pos = newPos;
+				this.UpdatePos();
+				return true;
+			}
+
+			if (needFix)
+			{
+				this.cubesArray.SetFigure(this.rotationInfo, this.pos, true);
+			}
+			else
+			{
+				this.pos = newPos;
+			}
+			return false;
 		}
 
 		public void MoveSide(bool left)
 		{
 			Vector2Int newPos = this.pos + (left ? Vector2Int.left : Vector2Int.right);
-			if (this.cubesArray.CheckFigure(this.rotationInfo, newPos))
+			if (this.cubesArray.CheckFigure(this.rotationInfo, newPos, true))
 			{
 				this.pos = newPos;
 				this.UpdatePos();

@@ -36,5 +36,12 @@ namespace Assets
 		{
 			return rect.Contains(r.min) && rect.Contains(r.max);
 		}
+
+		public static RectInt Offset(this RectInt rect, Vector2Int p)
+		{
+			rect.x += p.x;
+			rect.y += p.y;
+			return rect;
+		}
 	}
 }
