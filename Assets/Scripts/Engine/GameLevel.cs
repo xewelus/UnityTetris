@@ -60,10 +60,11 @@ namespace Assets.Scripts.Engine
 
 				if (this.figureInfo == null)
 				{
-					Vector3Int localPoint = new Vector3Int(this.gameDesk.Width / 2, this.gameDesk.Height, 0);
+					Vector2Int localPoint = new Vector2Int(this.gameDesk.Width / 2, this.gameDesk.Height);
 					Color color = this.gameDesk.MaterialsScope.GetRandomColor();
 					this.figureInfo = new FigureInfo(
 						sample: this.gameDesk.Figure,
+						size: new Vector2Int(this.gameDesk.Width, this.gameDesk.Height), 
 						localPoint: localPoint,
 						transform: this.gameDesk.CupLayer.transform,
 						color: color,
@@ -99,8 +100,9 @@ namespace Assets.Scripts.Engine
 
 			if (e.NewCellType != CubesArray.CellType.None)
 			{
-				Vector3 pos = new Vector3(e.Point.x, e.Point.y);
+				Vector3 pos = new Vector3(e.Point.x + 0.5f, e.Point.y + 0.5f);
 				AtomCube cube = Util.CreateLocal(this.gameDesk.AtomCube, this.gameDesk.CupLayer.transform, pos);
+				cube.GetComponent<Renderer>().material.color = Color.grey;
 				e.NewAtomCube = cube;
 			}
 		}

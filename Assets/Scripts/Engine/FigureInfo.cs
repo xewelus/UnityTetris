@@ -10,12 +10,14 @@ namespace Assets.Scripts.Engine
 		private readonly Figure Figure;
 		private readonly GameParameters parameters;
 		private readonly CubesArray cubesArray;
-		private Vector3Int pos;
+		private readonly Vector2Int size;
+		private Vector2Int pos;
 		private RotateAction rotateAction;
 		private RotationInfo rotationInfo;
 		public FigureInfo(
-			Figure sample, 
-			Vector3Int localPoint,
+			Figure sample,
+			Vector2Int size,
+			Vector2Int localPoint,
 			Transform transform, 
 			Color color, 
 			FigureAssetScope figureAssetScope,
@@ -25,12 +27,13 @@ namespace Assets.Scripts.Engine
 			this.parameters = parameters;
 			this.cubesArray = cubesArray;
 
+			this.size = size;
 			this.pos = localPoint;
 
 			FigureAsset figureAsset = figureAssetScope.GetRandom();
 			this.pos.y -= figureAsset.Height;
 
-			Figure figure = Util.CreateLocal(sample, transform, this.pos);
+			Figure figure = Util.CreateLocal(sample, transform, this.pos.ToVector3Int());
 			figure.Color = color;
 
 			figure.FigureAsset = figureAsset;
@@ -43,13 +46,13 @@ namespace Assets.Scripts.Engine
 
 		private void UpdatePos()
 		{
-			this.Figure.transform.localPosition = this.pos;
+			this.Figure.transform.localPosition = this.pos.ToVector3Int();
 			this.UpdateCubeArray();
 		}
 
 		private void UpdateCubeArray()
 		{
-			this.cubesArray.SetFigure(this.rotationInfo, (Vector2Int)this.pos);
+			this.cubesArray.SetFigure(this.rotationInfo, this.pos);
 		}
 
 		public bool MoveDown()
@@ -61,8 +64,12 @@ namespace Assets.Scripts.Engine
 
 		public void MoveSide(bool left)
 		{
-			this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
-			this.UpdatePos();
+			int newX = left ? this.pos.x - 1 : this.pos.x + 1;
+			if (newX + this.rotationInfo.Bounds.x >= 0 && newX + this.rotationInfo.Bounds.xMax < this.size.x)
+			{
+				this.pos.x = left ? this.pos.x - 1 : this.pos.x + 1;
+				this.UpdatePos();
+			}
 		}
 
 		public void Rotate(bool left)

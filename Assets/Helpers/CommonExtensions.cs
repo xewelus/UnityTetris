@@ -26,5 +26,10 @@ namespace Assets
 		{
 			Object.Destroy(obj.gameObject);
 		}
+
+		public static Vector3Int ToVector3Int(this Vector2Int v)
+		{
+			return new Vector3Int(v.x, v.y, 0);
+		}
 	}
 }

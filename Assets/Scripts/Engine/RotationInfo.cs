@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Engine
@@ -8,6 +9,7 @@ namespace Assets.Scripts.Engine
 		private readonly Collection collection;
 		public readonly List<Vector2> Points;
 		public readonly List<Vector2Int> Points0 = new List<Vector2Int>();
+		public readonly RectInt Bounds;
 		private readonly int index;
 
 		private RotationInfo(List<Vector2> points, Collection collection, int index)
@@ -16,11 +18,25 @@ namespace Assets.Scripts.Engine
 			this.collection = collection;
 			this.index = index;
 
+			Vector2Int? min = null;
+			Vector2Int? max = null;
 			foreach (Vector2 point in points)
 			{
 				Vector2Int p = new Vector2Int(Mathf.CeilToInt(point.x), Mathf.FloorToInt(point.y));
 				this.Points0.Add(p);
+
+				if (min == null) min = p;
+				if (max == null) max = p;
+				min = new Vector2Int(Mathf.Min(min.Value.x, p.x), Mathf.Min(min.Value.y, p.y));
+				max = new Vector2Int(Mathf.Max(max.Value.x, p.x), Mathf.Max(max.Value.y, p.y));
 			}
+
+			if (min == null || max == null) throw new Exception("min, max");
+
+			//Vector2Int size = max.Value - min.Value + Vector2Int.one;
+			RectInt rect = new RectInt();
+			rect.SetMinMax(min.Value, max.Value);
+			this.Bounds = rect;
 		}
 
 		public static RotationInfo Create(List<Vector2> points)
