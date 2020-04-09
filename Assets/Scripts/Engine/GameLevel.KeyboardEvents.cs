@@ -15,6 +15,7 @@
 				KeyboardEvents events = new KeyboardEvents(gameLevel);
 				keyboard.MoveLeft += events.Keyboard_MoveLeft;
 				keyboard.MoveRight += events.Keyboard_MoveRight;
+				keyboard.MoveDown += events.Keyboard_MoveDown;
 				keyboard.RotateLeft += events.Keyboard_RotateLeft;
 				keyboard.RotateRight += events.Keyboard_RotateRight;
 				keyboard.Pause += events.Keyboard_Pause;
@@ -28,6 +29,12 @@
 			private void Keyboard_MoveRight()
 			{
 				this.gameLevel.figureInfo?.MoveSide(false);
+			}
+
+			private void Keyboard_MoveDown()
+			{
+				this.gameLevel.figureInfo?.MoveDown(true);
+				this.gameLevel.lastTime = this.gameLevel.timing.time;
 			}
 
 			private void Keyboard_RotateLeft()

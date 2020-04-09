@@ -10,6 +10,7 @@ namespace Assets.Scripts.Engine
 
 		public event Action MoveLeft;
 		public event Action MoveRight;
+		public event Action MoveDown;
 		public event Action RotateLeft;
 		public event Action RotateRight;
 		public event Action Pause;
@@ -17,6 +18,8 @@ namespace Assets.Scripts.Engine
 		private float? lastMoveSideTime;
 		private bool? lastMoveSide;
 		private bool? lastPressed;
+
+		private float? lastMoveDownTime;
 
 		public KeyboardController(GameParameters.KeyboardParameters parameters, Timing timing)
 		{
@@ -26,7 +29,8 @@ namespace Assets.Scripts.Engine
 
 		public void Update()
 		{
-			this.CheckMoveKeys();
+			this.CheckMoveSide();
+			this.CheckMoveDown();
 
 			if (Input.GetKey(this.parameters.RotateLeft))
 			{
@@ -42,7 +46,7 @@ namespace Assets.Scripts.Engine
 			}
 		}
 
-		private void CheckMoveKeys()
+		private void CheckMoveSide()
 		{
 			bool leftPressed = Input.GetKey(this.parameters.Left);
 			bool rightPressed = Input.GetKey(this.parameters.Right);
@@ -78,6 +82,21 @@ namespace Assets.Scripts.Engine
 						this.lastMoveSide = side;
 						action.Invoke();
 					}
+				}
+			}
+		}
+
+		private void CheckMoveDown()
+		{
+			if (this.MoveDown != null)
+			{
+				if (!Input.GetKey(this.parameters.Down)) return;
+
+				float now = this.timing.time;
+				if (this.lastMoveDownTime == null || this.lastMoveDownTime.Value + this.parameters.MoveDownDelay < now)
+				{
+					this.lastMoveDownTime = now;
+					this.MoveDown.Invoke();
 				}
 			}
 		}

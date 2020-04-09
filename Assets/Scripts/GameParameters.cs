@@ -24,6 +24,9 @@ namespace Assets.Scripts
 			public float MoveSideDelay = 0.2f;
 
 			[DataMember]
+			public float MoveDownDelay = 0.05f;
+
+			[DataMember]
 			public KeyCode Left = KeyCode.LeftArrow;
 
 			[DataMember]
