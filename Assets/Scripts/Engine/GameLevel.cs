@@ -11,12 +11,16 @@ namespace Assets.Scripts.Engine
 		private float? lastTime;
 		private readonly KeyboardController keyboard;
 		private readonly Timing timing = new Timing();
+		private readonly CubesArray cubesArray;
 
 		public GameLevel(GameDesk gameDesk)
 		{
 			TweenFactory.DefaultTimeFunc = () => this.timing.deltaTime;
 
 			this.gameDesk = gameDesk;
+
+			this.cubesArray = new CubesArray(gameDesk.Width, gameDesk.Height);
+			this.cubesArray.CellChanged += this.CubesArray_OnCellChanged;
 
 			if (gameDesk.Parameters == null) throw new Exception("gameDesk.Parameters");
 			if (gameDesk.Parameters.Keyboard == null) throw new Exception("gameDesk.Parameters.Keyboard");
@@ -64,7 +68,8 @@ namespace Assets.Scripts.Engine
 						transform: this.gameDesk.CupLayer.transform,
 						color: color,
 						figureAssetScope: this.gameDesk.FigureAssetScope,
-						parameters: this.gameDesk.Parameters);
+						parameters: this.gameDesk.Parameters,
+						cubesArray: this.cubesArray);
 				}
 				else
 				{
@@ -81,6 +86,23 @@ namespace Assets.Scripts.Engine
 			if (this.figureInfo != null)
 			{
 				this.figureInfo.Update(this.timing);
+			}
+		}
+
+		private void CubesArray_OnCellChanged(CubesArray.CellChangedEventArgs e)
+		{
+			if (e.PrevAtomCube != null)
+			{
+				Debug.Log("DestroyObject " + e.PrevAtomCube);
+				e.PrevAtomCube.DestroyObject();
+				e.NewAtomCube = null;
+			}
+
+			if (e.NewCellType != CubesArray.CellType.None)
+			{
+				Vector3 pos = new Vector3(e.Point.x, e.Point.y);
+				AtomCube cube = Util.CreateLocal(this.gameDesk.AtomCube, this.gameDesk.CupLayer.transform, pos);
+				e.NewAtomCube = cube;
 			}
 		}
 	}

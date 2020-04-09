@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DigitalRuby.Tween;
 using UnityEngine;
 
@@ -8,17 +9,21 @@ namespace Assets.Scripts.Engine
 	{
 		private readonly Figure Figure;
 		private readonly GameParameters parameters;
+		private readonly CubesArray cubesArray;
 		private Vector3Int pos;
 		private RotateAction rotateAction;
+		private RotationInfo rotationInfo;
 		public FigureInfo(
 			Figure sample, 
 			Vector3Int localPoint,
 			Transform transform, 
 			Color color, 
 			FigureAssetScope figureAssetScope,
-			GameParameters parameters)
+			GameParameters parameters,
+			CubesArray cubesArray)
 		{
 			this.parameters = parameters;
+			this.cubesArray = cubesArray;
 
 			this.pos = localPoint;
 
@@ -31,11 +36,20 @@ namespace Assets.Scripts.Engine
 			figure.FigureAsset = figureAsset;
 			figure.CreateCubes();
 			this.Figure = figure;
+
+			List<Vector2> points = figureAsset.GetCubesPositions(0);
+			this.rotationInfo = RotationInfo.Create(points);
 		}
 
 		private void UpdatePos()
 		{
 			this.Figure.transform.localPosition = this.pos;
+			this.UpdateCubeArray();
+		}
+
+		private void UpdateCubeArray()
+		{
+			this.cubesArray.SetFigure(this.rotationInfo, (Vector2Int)this.pos);
 		}
 
 		public bool MoveDown()
@@ -54,6 +68,8 @@ namespace Assets.Scripts.Engine
 		public void Rotate(bool left)
 		{
 			if (this.rotateAction != null) return;
+
+			this.UpdateCubeArray();
 
 			this.rotateAction = new RotateAction(
 				figure: this.Figure, 

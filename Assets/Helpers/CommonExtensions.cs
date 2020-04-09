@@ -21,5 +21,10 @@ namespace Assets
 				                               };
 			}
 		}
+
+		public static void DestroyObject<T>(this T obj) where T : MonoBehaviour
+		{
+			Object.Destroy(obj);
+		}
 	}
 }
