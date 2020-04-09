@@ -65,6 +65,7 @@
     <Compile Include="Assets\Helpers\CommonExtensions.cs" />
     <Compile Include="Assets\Interfaces\Interfaces.cs" />
     <Compile Include="Assets\Scripts\AtomCube.cs" />
+    <Compile Include="Assets\Scripts\Engine\CompilerOptionsEditorScript.cs" />
     <Compile Include="Assets\Scripts\Engine\CubesArray.cs" />
     <Compile Include="Assets\Scripts\Engine\FigureInfo.cs" />
     <Compile Include="Assets\Scripts\Engine\GameLevel.KeyboardEvents.cs" />
