@@ -69,6 +69,7 @@ namespace Assets.Scripts.Engine
 		{
 			if (this.rotateAction != null) return;
 
+			this.rotationInfo = this.rotationInfo.GetRotated(left);
 			this.UpdateCubeArray();
 
 			this.rotateAction = new RotateAction(
