@@ -70,8 +70,8 @@ namespace Assets.Scripts
 
 		protected virtual void SetMaterial(Renderer rndr, Color? color = null)
 		{
-			rndr.sharedMaterial = Instantiate(rndr.sharedMaterial);
-			rndr.sharedMaterial.color = color ?? this.Color;
+			color = color ?? this.Color;
+			rndr.sharedMaterial = MaterialsScope.Cache.Default.GetOrCreate(color.Value, rndr.sharedMaterial);
 		}
 	}
 }
