@@ -42,51 +42,47 @@ namespace Assets.Scripts.Engine
 		private void UpdateFigure()
 		{
 			float now = this.timing.time;
-			float? time = this.lastTime;
-			while (true)
+			if (this.figureInfo == null)
 			{
-				if (time == null)
-				{
-					time = now;
-				}
-				else
-				{
-					time += this.gameDesk.TimeInterval;
-					if (time > now)
-					{
-						break;
-					}
-				}
-
-				if (this.figureInfo == null)
-				{
-					Vector2Int localPoint = new Vector2Int(this.gameDesk.Width / 2, this.gameDesk.Height);
-					Color color = this.gameDesk.MaterialsScope.GetRandomColor();
-					this.figureInfo = new FigureInfo(
-						sample: this.gameDesk.Figure,
-						localPoint: localPoint,
-						transform: this.gameDesk.CupLayer.transform,
-						color: color,
-						figureAssetScope: this.gameDesk.FigureAssetScope,
-						parameters: this.gameDesk.Parameters,
-						cubesArray: this.cubesArray);
-				}
-				else
-				{
-					bool ok = this.figureInfo.MoveDown(true);
-					if (!ok)
-					{
-						this.figureInfo = null;
-					}
-				}
-
-				this.lastTime = time;
+				this.figureInfo = this.CreateFigure();
+				this.lastTime = now;
+			}
+			else if (this.lastTime == null || this.lastTime.Value + this.gameDesk.TimeInterval <= now)
+			{
+				this.MoveFigureDown();
 			}
 
 			if (this.figureInfo != null)
 			{
 				this.figureInfo.Update(this.timing);
 			}
+		}
+
+		private void MoveFigureDown()
+		{
+			if (this.figureInfo == null) return;
+
+			bool ok = this.figureInfo.MoveDown(true);
+			this.lastTime = this.timing.time;
+			if (!ok)
+			{
+				this.figureInfo = null;
+			}
+		}
+
+		private FigureInfo CreateFigure()
+		{
+			Vector2Int localPoint = new Vector2Int(this.gameDesk.Width / 2, this.gameDesk.Height);
+			Color color = this.gameDesk.MaterialsScope.GetRandomColor();
+			FigureInfo info = new FigureInfo(
+				sample: this.gameDesk.Figure,
+				localPoint: localPoint,
+				transform: this.gameDesk.CupLayer.transform,
+				color: color,
+				figureAssetScope: this.gameDesk.FigureAssetScope,
+				parameters: this.gameDesk.Parameters,
+				cubesArray: this.cubesArray);
+			return info;
 		}
 
 		private void CubesArray_OnCellChanged(CubesArray.CellChangedEventArgs e)

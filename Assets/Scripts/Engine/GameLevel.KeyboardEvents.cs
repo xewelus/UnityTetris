@@ -33,8 +33,7 @@
 
 			private void Keyboard_MoveDown()
 			{
-				this.gameLevel.figureInfo?.MoveDown(true);
-				this.gameLevel.lastTime = this.gameLevel.timing.time;
+				this.gameLevel.MoveFigureDown();
 			}
 
 			private void Keyboard_RotateLeft()
