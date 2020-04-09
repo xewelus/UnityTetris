@@ -42,11 +42,22 @@ namespace Assets.Scripts.Engine
 
 			List<Vector2> points = figureAsset.GetCubesPositions(0);
 			this.rotationInfo = RotationInfo.Create(points);
+
+			this.UpdatePos();
+		}
+
+		private Vector2 GetPostion()
+		{
+			return this.pos + this.rotationInfo.Bounds.center + new Vector2(0.5f, 0.5f);
 		}
 
 		private void UpdatePos()
 		{
-			this.Figure.transform.localPosition = this.pos.ToVector3Int();
+			if (this.rotateAction != null)
+			{
+				this.rotateAction.NeedMove = false;
+			}
+			this.Figure.transform.localPosition = this.GetPostion();
 			this.UpdateCubeArray();
 		}
 
@@ -79,9 +90,12 @@ namespace Assets.Scripts.Engine
 			this.rotationInfo = this.rotationInfo.GetRotated(left);
 			this.UpdateCubeArray();
 
+			Vector2 position = this.GetPostion();
+
 			this.rotateAction = new RotateAction(
 				figure: this.Figure, 
-				multiplier: left ? -1f : 1f,
+				multiplier: left ? 1f : -1f,
+				position: position, 
 				parameters: this.parameters.FigureRotation);
 
 			this.rotateAction.Complete += () => this.rotateAction = null;
@@ -98,23 +112,42 @@ namespace Assets.Scripts.Engine
 		private class RotateAction
 		{
 			private readonly FloatTween tween;
+			private readonly Transform transform;
+			private readonly float multiplier;
+			private readonly float startAngle;
+			private readonly Vector2 position0;
+			private readonly Vector2 position;
 			public event Action Complete;
+			public bool NeedMove = true;
 
-			public RotateAction(Figure figure, float multiplier, GameParameters.FigureRotationParameters parameters)
+			public RotateAction(Figure figure, float multiplier, Vector2 position, GameParameters.FigureRotationParameters parameters)
 			{
-				Transform transform = figure.transform;
-
-				float startAngle = transform.rotation.eulerAngles.z;
-				float endAngle = startAngle + 90f * multiplier;
+				this.multiplier = multiplier;
+				this.transform = figure.transform;
+				this.position0 = figure.transform.localPosition;
+				this.position = position;
+				this.startAngle = figure.transform.rotation.eulerAngles.z;
 
 				this.tween = figure.gameObject.Tween(
 					key: "Rotate", 
-					start: startAngle,
-					end: endAngle, 
+					start: 0f,
+					end: 1f, 
 					duration: parameters.Time, 
 					scaleFunc: parameters.Tween.ToFunction(),
-					progress: t => transform.localRotation = Quaternion.AngleAxis(t.CurrentValue, Vector3.forward), 
+					progress: this.Progress, 
 					completion: this.OnComplete);
+			}
+
+			private void Progress(ITween<float> t)
+			{
+				float angle = this.startAngle + 90f * this.multiplier * t.CurrentValue;
+				this.transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+				if (this.NeedMove)
+				{
+					Vector2 p = this.position0 + (this.position - this.position0) * t.CurrentValue;
+					this.transform.localPosition = p;
+				}
 			}
 
 			public void Update(Timing timing)
