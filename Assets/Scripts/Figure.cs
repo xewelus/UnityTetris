@@ -30,33 +30,11 @@ namespace Assets.Scripts
 
 			if (this.FigureAsset == null) return;
 
-			List<Vector2> posList = this.GetCubesPositions();
+			List<Vector2> posList = this.FigureAsset.GetCubesPositions(this.RotationIndex);
 			foreach (Vector2 p in posList)
 			{
 				this.CreateAtom(p);
 			}
-		}
-
-		public List<Vector2> GetCubesPositions()
-		{
-			FigureAsset.Item item = this.GetFigureAssetItem();
-			Vector2 center = item.GetCenter();
-
-			List<Vector2> list = new List<Vector2>();
-			foreach (Vector2Int point in item.GetCells())
-			{
-				Vector2 p = point - center + Vector2.one * 0.5f;
-				list.Add(p);
-			}
-			return list;
-		}
-
-		public FigureAsset.Item GetFigureAssetItem()
-		{
-			int rotationIndex;
-			Math.DivRem(this.RotationIndex, this.FigureAsset.Rotations.Count, out rotationIndex);
-			FigureAsset.Item item = this.FigureAsset.Rotations[rotationIndex];
-			return item;
 		}
 
 		private void CreateAtom(Vector2 p, Color? color = null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.Serialization;
+using Assets.Interfaces;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Assets.Scripts
 {
 	[Serializable]
-	public class FigureAsset : MonoBehaviour
+	public class FigureAsset : MonoBehaviour, IOnValidate
 	{
 		private const int DEFAULT_SIZE = 4;
 
@@ -24,8 +25,7 @@ namespace Assets.Scripts
 
 		private Size? prevSize;
 
-		[PublicAPI]
-		void OnValidate()
+		public void OnValidate()
 		{
 			if (EditorApplication.isPlayingOrWillChangePlaymode)
 			{
@@ -40,6 +40,21 @@ namespace Assets.Scripts
 				}
 				this.prevSize = new Size(this.Width, this.Height);
 			}
+		}
+
+		private Item GetFigureAssetItem(int index)
+		{
+			int rotationIndex;
+			Math.DivRem(index, this.Rotations.Count, out rotationIndex);
+			FigureAsset.Item item = this.Rotations[rotationIndex];
+			return item;
+		}
+
+		public List<Vector2> GetCubesPositions(int index)
+		{
+			FigureAsset.Item item = this.GetFigureAssetItem(index);
+			List<Vector2> list = item.GetCubesPositions();
+			return list;
 		}
 
 		[Serializable]
@@ -83,7 +98,7 @@ namespace Assets.Scripts
 				}
 			}
 
-			public IEnumerable<Vector2Int> GetCells()
+			private IEnumerable<Vector2Int> GetCells()
 			{
 				for (int y = 0; y < this.List.Count; y++)
 				{
@@ -99,7 +114,7 @@ namespace Assets.Scripts
 				}
 			}
 
-			public Vector2 GetCenter()
+			private Vector2 GetCenter()
 			{
 				Vector2Int? min = null;
 				Vector2Int? max = null;
@@ -113,6 +128,19 @@ namespace Assets.Scripts
 				if (min == null || max == null) throw new Exception("min == null || max == null");
 				Vector2 p = (Vector2.one + max.Value - min.Value) / 2f + min.Value;
 				return p;
+			}
+
+			public List<Vector2> GetCubesPositions()
+			{
+				Vector2 center = this.GetCenter();
+
+				List<Vector2> list = new List<Vector2>();
+				foreach (Vector2Int point in this.GetCells())
+				{
+					Vector2 p = point - center + Vector2.one * 0.5f;
+					list.Add(p);
+				}
+				return list;
 			}
 		}
 
