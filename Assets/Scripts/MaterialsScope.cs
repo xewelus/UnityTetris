@@ -94,6 +94,7 @@ namespace Assets.Scripts
 					if (!this.materials.TryGetValue(key, out material))
 					{
 						material = Instantiate(sample);
+						material.color = color;
 						material.name = ColorUtility.ToHtmlStringRGB(color);
 						this.materials.Add(key, material);
 					}
