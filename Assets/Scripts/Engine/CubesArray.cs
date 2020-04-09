@@ -46,7 +46,6 @@ namespace Assets.Scripts.Engine
 		{
 			foreach (Cell cell in this.figureCells)
 			{
-				Debug.Log("RemoveFigure " + cell);
 				this.SetCell(cell.Point, CellType.None);
 			}
 			this.figureCells.Clear();

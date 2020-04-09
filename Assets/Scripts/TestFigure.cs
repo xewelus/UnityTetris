@@ -49,8 +49,6 @@ namespace Assets.Scripts
 				return;
 			}
 
-			Debug.Log("Need regenerate " + this.name);
-
 			this.transform.DestroyChildrenOnDelayCall();
 			this.CreateCubes();
 

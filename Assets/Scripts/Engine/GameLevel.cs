@@ -93,7 +93,6 @@ namespace Assets.Scripts.Engine
 		{
 			if (e.PrevAtomCube != null)
 			{
-				Debug.Log("DestroyObject " + e.PrevAtomCube);
 				e.PrevAtomCube.DestroyObject();
 				e.NewAtomCube = null;
 			}
