@@ -54,6 +54,7 @@ namespace Assets.Scripts.Engine
 
 			public void Release()
 			{
+				this.AtomCube.transform.localPosition = new Vector3(1000, 1000, 0);
 				this.AtomCube.transform.parent = null;
 				this.pool.Release(this);
 			}

@@ -19,6 +19,7 @@ namespace Assets.Scripts.Engine
 			TweenFactory.DefaultTimeFunc = () => this.timing.deltaTime;
 
 			this.gameDesk = gameDesk;
+			this.atomCubePool = new AtomCubePool(this.gameDesk.AtomCube, MaterialsScope.Cache.Default);
 
 			this.cubesArray = new CubesArray(gameDesk.Width, gameDesk.Height);
 			this.cubesArray.CellChanged += this.CubesArray_OnCellChanged;
@@ -28,8 +29,6 @@ namespace Assets.Scripts.Engine
 
 			this.keyboard = new KeyboardController(gameDesk.Parameters.Keyboard, this.timing);
 			KeyboardEvents.Init(this, this.keyboard);
-
-			this.atomCubePool = new AtomCubePool(this.gameDesk.AtomCube, MaterialsScope.Cache.Default);
 		}
 
 		public void Update()
@@ -95,8 +94,7 @@ namespace Assets.Scripts.Engine
 			{
 				if (e.PrevAtomCubeItem != null)
 				{
-					e.PrevAtomCubeItem.AtomCube.transform.parent = null;
-					this.atomCubePool.Release(e.PrevAtomCubeItem);
+					e.PrevAtomCubeItem.Release();
 				}
 			}
 

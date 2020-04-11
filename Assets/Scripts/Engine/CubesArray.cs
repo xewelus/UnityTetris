@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Engine
@@ -38,6 +37,41 @@ namespace Assets.Scripts.Engine
 				this.SetCell(cell.Point, CellType.Fixed);
 			}
 			this.figureCells.Clear();
+
+			this.CheckFullRows();
+		}
+
+		private void CheckFullRows()
+		{
+			for (int y = this.Rows.Count - 1; y >= 0; y--)
+			{
+				Row row = this.Rows[y];
+				if (row.IsFull())
+				{
+					this.RemoveRow(y);
+				}
+			}
+		}
+
+		private void RemoveRow(int rowIndex)
+		{
+			for (int y = rowIndex; y < this.Bounds.height; y++)
+			{
+				for (int x = 0; x < this.Bounds.width; x++)
+				{
+					Vector2Int destPoint = new Vector2Int(x, y);
+					if (y == this.Rows.Count - 1)
+					{
+						this.SetCell(destPoint, CellType.None);
+					}
+					else
+					{
+						Cell srcCell = this.GetCell(new Vector2Int(x, y + 1));
+						CellType cellType = srcCell.Type == CellType.None ? CellType.None : CellType.Fixed;
+						this.SetCell(destPoint, cellType);
+					}
+				}
+			}
 		}
 
 		public void SetFigure(RotationInfo figureAsset, Vector2Int point)
@@ -126,6 +160,14 @@ namespace Assets.Scripts.Engine
 			}
 		}
 
+		public void SetTestLine()
+		{
+			for (int i = 0; i < this.Bounds.xMax - 1; i++)
+			{
+				this.SetCell(new Vector2Int(i, 0), CellType.Fixed);
+			}
+		}
+
 		public enum CellType
 		{
 			None,
@@ -152,7 +194,16 @@ namespace Assets.Scripts.Engine
 
 		private class Row
 		{
-			public List<Cell> Cells = new List<Cell>();
+			public readonly List<Cell> Cells = new List<Cell>();
+
+			public bool IsFull()
+			{
+				foreach (Cell cell in this.Cells)
+				{
+					if (cell.Type != CellType.Fixed) return false;
+				}
+				return true;
+			}
 		}
 
 		public class CellChangedEventArgs : EventArgs
