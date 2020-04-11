@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Keyboard:
     MoveSideDelay: 0.2
+    MoveDownDelay: 0.05
     Left: 276
     Right: 275
     RotateLeft: 273
@@ -52,7 +53,7 @@ MonoBehaviour:
     Down: 274
     Pause: 19
   FigureRotation:
-    Time: 1
+    Time: 0.3
     Tween: 15
   Test:
     Arround: {x: 0, y: 0, z: 0}
