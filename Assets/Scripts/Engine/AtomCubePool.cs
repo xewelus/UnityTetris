@@ -8,47 +8,37 @@ namespace Assets.Scripts.Engine
 	{
 		private readonly AtomCube atomCubeSample;
 		private readonly Transform parent;
-	
-		public AtomCubePool(
-			AtomCube sample,
-			MaterialsScope.Cache materialsCache) : base(() => CreateFunc(sample, materialsCache))
+		private readonly MaterialsScope.Cache materialsCache;
+		private readonly Material materialSample;
+
+		public AtomCubePool(AtomCube sample, MaterialsScope.Cache materialsCache) 
+			: base(pool => CreateFunc((AtomCubePool)pool, sample))
 		{
+			this.materialsCache = materialsCache ?? throw new Exception("materialsCache");
+
+			Renderer renderer = sample.GetComponent<Renderer>();
+			this.materialSample = renderer.sharedMaterial;
 		}
 
-		private static Item CreateFunc(AtomCube sample, MaterialsScope.Cache materialsCache)
+		private static Item CreateFunc(AtomCubePool pool, AtomCube sample)
 		{
 			AtomCube cube = Object.Instantiate(sample);
 
-			Renderer renderer = sample.GetComponent<Renderer>();
-			PoolInfo poolInfo = new PoolInfo(materialsCache, renderer.sharedMaterial);
-
-			Item item = new Item(cube, poolInfo);
+			Item item = new Item(pool, cube);
 			return item;
-		}
-
-		public class PoolInfo
-		{
-			public readonly MaterialsScope.Cache MaterialsCache;
-			public readonly Material MaterialSample;
-
-			public PoolInfo(MaterialsScope.Cache materialsCache, Material materialSample)
-			{
-				this.MaterialsCache = materialsCache ?? throw new Exception("materialsCache");
-				this.MaterialSample = materialSample ?? throw new Exception("materialSample");
-			}
 		}
 
 		public class Item : IPoolable
 		{
 			public readonly AtomCube AtomCube;
 			private readonly Renderer renderer;
-			private readonly PoolInfo poolInfo;
+			private readonly AtomCubePool pool;
 
-			public Item(AtomCube atomCube, PoolInfo poolInfo)
+			public Item(AtomCubePool pool, AtomCube atomCube)
 			{
+				this.pool = pool;
 				this.AtomCube = atomCube;
 				this.renderer = atomCube.GetComponent<Renderer>();
-				this.poolInfo = poolInfo;
 			}
 
 			public void PrepareForUse()
@@ -59,7 +49,7 @@ namespace Assets.Scripts.Engine
 
 			public void SetColor(Color color)
 			{
-				this.renderer.sharedMaterial = this.poolInfo.MaterialsCache.GetOrCreate(color, this.poolInfo.MaterialSample);
+				this.renderer.sharedMaterial = this.pool.materialsCache.GetOrCreate(color, this.pool.materialSample);
 			}
 		}
 	}
