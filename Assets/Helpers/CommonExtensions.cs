@@ -10,6 +10,7 @@ namespace Assets
 		/// </summary>
 		public static void DestroyChildrenOnDelayCall(this Transform transform)
 		{
+#if UNITY_EDITOR
 			foreach (Transform t in transform)
 			{
 				EditorApplication.delayCall += () =>
@@ -20,6 +21,7 @@ namespace Assets
 					                               }
 				                               };
 			}
+#endif
 		}
 
 		public static void DestroyObject<T>(this T obj) where T : MonoBehaviour

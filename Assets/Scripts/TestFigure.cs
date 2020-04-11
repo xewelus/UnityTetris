@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using Assets.Interfaces;
 using Assets.Scripts.Engine;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -30,7 +29,7 @@ namespace Assets.Scripts
 				this.prevFigureAsset = this.FigureAsset;
 			}
 
-			if (EditorApplication.isPlayingOrWillChangePlaymode)
+			if (Util.IsPlayingOrWillChangePlaymode())
 			{
 				return;
 			}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -53,3 +54,4 @@ namespace Assets.Scripts
 		}
 	}
 }
+#endif

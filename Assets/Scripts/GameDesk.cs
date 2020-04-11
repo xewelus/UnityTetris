@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Assets.Interfaces;
 using Assets.Scripts.Engine;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -46,7 +45,7 @@ namespace Assets.Scripts
 
 		public void OnValidate()
 		{
-			if (EditorApplication.isPlayingOrWillChangePlaymode)
+			if (Util.IsPlayingOrWillChangePlaymode())
 			{
 				return;
 			}

@@ -14,5 +14,14 @@ namespace Assets.Scripts.Engine
 			result.transform.localPosition = localPosition.Value;
 			return result;
 		}
+
+		public static bool IsPlayingOrWillChangePlaymode()
+		{
+#if UNITY_EDITOR
+			return UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;
+#else
+			return true;
+#endif
+		}
 	}
 }

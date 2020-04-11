@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Assets.Interfaces;
-using UnityEditor;
+using Assets.Scripts.Engine;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -21,7 +21,7 @@ namespace Assets.Scripts
 
 		public void OnValidate()
 		{
-			if (EditorApplication.isPlayingOrWillChangePlaymode)
+			if (Util.IsPlayingOrWillChangePlaymode())
 			{
 				return;
 			}

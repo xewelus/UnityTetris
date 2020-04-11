@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts.Engine
@@ -12,3 +13,4 @@ namespace Assets.Scripts.Engine
 		}
 	}
 }
+#endif
