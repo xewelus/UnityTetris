@@ -12,6 +12,7 @@ namespace Assets.Scripts.Engine
 		private readonly KeyboardController keyboard;
 		private readonly Timing timing = new Timing();
 		private readonly CubesArray cubesArray;
+		private readonly AtomCubePool atomCubePool;
 
 		public GameLevel(GameDesk gameDesk)
 		{
@@ -27,6 +28,8 @@ namespace Assets.Scripts.Engine
 
 			this.keyboard = new KeyboardController(gameDesk.Parameters.Keyboard, this.timing);
 			KeyboardEvents.Init(this, this.keyboard);
+
+			this.atomCubePool = new AtomCubePool(this.gameDesk.AtomCube, MaterialsScope.Cache.Default);
 		}
 
 		public void Update()
@@ -81,24 +84,29 @@ namespace Assets.Scripts.Engine
 				color: color,
 				figureAssetScope: this.gameDesk.FigureAssetScope,
 				parameters: this.gameDesk.Parameters,
-				cubesArray: this.cubesArray);
+				cubesArray: this.cubesArray,
+				atomCubePool: this.atomCubePool);
 			return info;
 		}
 
 		private void CubesArray_OnCellChanged(CubesArray.CellChangedEventArgs e)
 		{
-			if (e.PrevAtomCube != null)
+			if (e.PrevCellType == CubesArray.CellType.Fixed && e.NewCellType == CubesArray.CellType.None)
 			{
-				e.PrevAtomCube.DestroyObject();
-				e.NewAtomCube = null;
+				if (e.PrevAtomCubeItem != null)
+				{
+					e.PrevAtomCubeItem.AtomCube.transform.parent = null;
+					this.atomCubePool.Release(e.PrevAtomCubeItem);
+				}
 			}
 
-			if (e.NewCellType != CubesArray.CellType.None)
+			if (e.PrevCellType != CubesArray.CellType.Fixed && e.NewCellType == CubesArray.CellType.Fixed)
 			{
-				Vector3 pos = new Vector3(e.Point.x + 0.5f, e.Point.y + 0.5f);
-				AtomCube cube = Util.CreateLocal(this.gameDesk.AtomCube, this.gameDesk.CupLayer.transform, pos);
-				cube.GetComponent<Renderer>().material.color = Color.grey;
-				e.NewAtomCube = cube;
+				AtomCubePool.Item poolItem = this.atomCubePool.Get();
+				poolItem.AtomCube.transform.parent = this.gameDesk.CupLayer.transform;
+				poolItem.AtomCube.transform.localPosition = new Vector3(e.Point.x + 0.5f, e.Point.y + 0.5f);
+				poolItem.SetColor(Color.grey);
+				e.NewAtomCubeItem = poolItem;
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Engine
@@ -30,15 +31,24 @@ namespace Assets.Scripts.Engine
 			}
 		}
 
-		public void SetFigure(RotationInfo figureAsset, Vector2Int point, bool isFixed)
+		public void FixFigure()
+		{
+			foreach (Cell cell in this.figureCells)
+			{
+				this.SetCell(cell.Point, CellType.Fixed);
+			}
+			this.figureCells.Clear();
+		}
+
+		public void SetFigure(RotationInfo figureAsset, Vector2Int point)
 		{
 			this.RemoveFigure();
 
 			foreach (Vector2Int p in figureAsset.Points0)
 			{
 				Vector2Int pp = p + point;
-				Cell cell = this.SetCell(pp, isFixed ? CellType.Fixed : CellType.Figure);
-				if (!isFixed && cell != null)
+				Cell cell = this.SetCell(pp, CellType.Figure);
+				if (cell != null)
 				{
 					this.figureCells.Add(cell);
 				}
@@ -110,9 +120,9 @@ namespace Assets.Scripts.Engine
 		{
 			if (this.CellChanged != null)
 			{
-				CellChangedEventArgs args = new CellChangedEventArgs(cell.Point, prevCellType, cell.Type, cell.AtomCube);
+				CellChangedEventArgs args = new CellChangedEventArgs(cell.Point, prevCellType, cell.Type, cell.AtomCubeItem);
 				this.CellChanged.Invoke(args);
-				cell.AtomCube = args.NewAtomCube;
+				cell.AtomCubeItem = args.NewAtomCubeItem;
 			}
 		}
 
@@ -127,7 +137,7 @@ namespace Assets.Scripts.Engine
 		{
 			public readonly Vector2Int Point;
 			public CellType Type = CellType.None;
-			public AtomCube AtomCube;
+			public AtomCubePool.Item AtomCubeItem;
 
 			public Cell(Vector2Int point)
 			{
@@ -150,16 +160,16 @@ namespace Assets.Scripts.Engine
 			public readonly Vector2Int Point;
 			public readonly CellType PrevCellType;
 			public readonly CellType NewCellType;
-			public readonly AtomCube PrevAtomCube;
-			public AtomCube NewAtomCube;
+			public readonly AtomCubePool.Item PrevAtomCubeItem;
+			public AtomCubePool.Item NewAtomCubeItem;
 
-			public CellChangedEventArgs(Vector2Int point, CellType prevCellType, CellType newCellType, AtomCube prevAtomCube)
+			public CellChangedEventArgs(Vector2Int point, CellType prevCellType, CellType newCellType, AtomCubePool.Item prevAtomCubeItem)
 			{
 				this.Point = point;
 				this.PrevCellType = prevCellType;
 				this.NewCellType = newCellType;
-				this.PrevAtomCube = prevAtomCube;
-				this.NewAtomCube = prevAtomCube;
+				this.PrevAtomCubeItem = prevAtomCubeItem;
+				this.NewAtomCubeItem = prevAtomCubeItem;
 			}
 		}
 	}

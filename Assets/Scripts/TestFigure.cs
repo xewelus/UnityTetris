@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Assets.Interfaces;
+using Assets.Scripts.Engine;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -50,16 +51,18 @@ namespace Assets.Scripts
 			}
 
 			this.transform.DestroyChildrenOnDelayCall();
-			this.CreateCubes();
+
+			AtomCubePool pool = new AtomCubePool(this.AtomCube, MaterialsScope.Cache.Default);
+			this.CreateCubes(pool);
 
 			this.prevFigureAsset = this.FigureAsset;
 		}
 
-		protected override void SetMaterial(Renderer rndr, Color? color = null)
+		protected override void SetMaterial(AtomCubePool.Item item, Renderer rndr, Color? color)
 		{
 			if (this.MaterialsScope == null)
 			{
-				base.SetMaterial(rndr);
+				base.SetMaterial(item, rndr, null);
 				return;
 			}
 

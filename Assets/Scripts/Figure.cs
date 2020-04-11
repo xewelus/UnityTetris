@@ -12,9 +12,6 @@ namespace Assets.Scripts
 		[DataMember]
 		public AtomCube AtomCube;
 
-		[NonSerialized]
-		public readonly List<AtomCube> Cubes = new List<AtomCube>();
-
 		[DataMember]
 		public FigureAsset FigureAsset;
 
@@ -24,32 +21,36 @@ namespace Assets.Scripts
 		[DataMember]
 		public Color Color = Color.white;
 
-		public void CreateCubes()
+		public List<AtomCubePool.Item> CreateCubes(AtomCubePool pool)
 		{
-			this.Cubes.Clear();
+			if (this.FigureAsset == null) return null;
 
-			if (this.FigureAsset == null) return;
-
+			List<AtomCubePool.Item> list = new List<AtomCubePool.Item>();
 			List<Vector2> posList = this.FigureAsset.GetCubesPositions(this.RotationIndex);
 			foreach (Vector2 p in posList)
 			{
-				this.CreateAtom(p);
+				AtomCubePool.Item item = this.CreateAtom(pool, p);
+				list.Add(item);
 			}
+			return list;
 		}
 
-		private void CreateAtom(Vector2 p, Color? color = null)
+		private AtomCubePool.Item CreateAtom(AtomCubePool pool, Vector2 p, Color? color = null)
 		{
-			AtomCube cube = Util.CreateLocal(this.AtomCube, this.transform, p);
-			this.Cubes.Add(cube);
+			AtomCubePool.Item item = pool.Get();
+			AtomCube cube = item.AtomCube;
+			cube.transform.parent = this.transform;
+			cube.transform.localPosition = p;
 
 			Renderer rndr = cube.GetComponent<Renderer>();
-			this.SetMaterial(rndr, color);
+			this.SetMaterial(item, rndr, color);
+			return item;
 		}
 
-		protected virtual void SetMaterial(Renderer rndr, Color? color = null)
+		protected virtual void SetMaterial(AtomCubePool.Item item, Renderer rndr, Color? color)
 		{
 			color = color ?? this.Color;
-			rndr.sharedMaterial = MaterialsScope.Cache.Default.GetOrCreate(color.Value, rndr.sharedMaterial);
+			item.SetColor(color.Value);
 		}
 	}
 }

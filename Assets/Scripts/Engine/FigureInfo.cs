@@ -10,9 +10,12 @@ namespace Assets.Scripts.Engine
 		private readonly Figure Figure;
 		private readonly GameParameters parameters;
 		private readonly CubesArray cubesArray;
+		private readonly AtomCubePool atomCubePool;
+		private readonly List<AtomCubePool.Item> cubesItems;
 		private Vector2Int pos;
 		private RotateAction rotateAction;
 		private RotationInfo rotationInfo;
+
 		public FigureInfo(
 			Figure sample,
 			Vector2Int localPoint,
@@ -20,10 +23,12 @@ namespace Assets.Scripts.Engine
 			Color color, 
 			FigureAssetScope figureAssetScope,
 			GameParameters parameters,
-			CubesArray cubesArray)
+			CubesArray cubesArray,
+			AtomCubePool atomCubePool)
 		{
 			this.parameters = parameters;
 			this.cubesArray = cubesArray;
+			this.atomCubePool = atomCubePool;
 
 			this.pos = localPoint;
 
@@ -33,7 +38,7 @@ namespace Assets.Scripts.Engine
 			figure.Color = color;
 
 			figure.FigureAsset = figureAsset;
-			figure.CreateCubes();
+			this.cubesItems = figure.CreateCubes(atomCubePool);
 			this.Figure = figure;
 
 			List<Vector2> points = figureAsset.GetCubesPositions(0);
@@ -61,7 +66,7 @@ namespace Assets.Scripts.Engine
 
 		private void UpdateCubeArray()
 		{
-			this.cubesArray.SetFigure(this.rotationInfo, this.pos, false);
+			this.cubesArray.SetFigure(this.rotationInfo, this.pos);
 		}
 
 		private void CheckStartPosition()
@@ -85,7 +90,8 @@ namespace Assets.Scripts.Engine
 
 			if (needFix)
 			{
-				this.cubesArray.SetFigure(this.rotationInfo, this.pos, true);
+				this.cubesArray.FixFigure();
+				this.ReleaseCubes();
 			}
 			else
 			{
@@ -127,6 +133,14 @@ namespace Assets.Scripts.Engine
 			if (this.rotateAction != null)
 			{
 				this.rotateAction.Update(timing);
+			}
+		}
+
+		private void ReleaseCubes()
+		{
+			foreach (AtomCubePool.Item item in this.cubesItems)
+			{
+				this.atomCubePool.Release(item);
 			}
 		}
 

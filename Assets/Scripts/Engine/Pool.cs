@@ -1,10 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Engine
 {
-	public class Pool<T> where T : class, new()
+	public class Pool<T> where T : class
 	{
 		private readonly Stack<T> objs = new Stack<T>();
+		private readonly Func<T> createFunc;
+
+		public Pool(Func<T> createFunc)
+		{
+			this.createFunc = createFunc;
+		}
+
 		public T Get()
 		{
 			T obj;
@@ -14,7 +23,7 @@ namespace Assets.Scripts.Engine
 			}
 			if (obj == null)
 			{
-				obj = new T();
+				obj = this.createFunc();
 			}
 			if (obj is IPoolable)
 			{
