@@ -103,7 +103,10 @@ namespace Assets.Scripts.Engine
 				AtomCubePool.Item poolItem = this.atomCubePool.Get();
 				poolItem.AtomCube.transform.parent = this.gameDesk.CupLayer.transform;
 				poolItem.AtomCube.transform.localPosition = new Vector3(e.Point.x + 0.5f, e.Point.y + 0.5f);
-				poolItem.SetColor(Color.grey);
+
+				Color color = Color.Lerp(this.figureInfo.Color, Color.black, 0.5f);
+				poolItem.SetColor(color);
+
 				e.NewAtomCubeItem = poolItem;
 			}
 		}

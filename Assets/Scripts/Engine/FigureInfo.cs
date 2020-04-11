@@ -7,6 +7,7 @@ namespace Assets.Scripts.Engine
 {
 	public class FigureInfo
 	{
+		public readonly Color Color;
 		private readonly Figure Figure;
 		private readonly GameParameters parameters;
 		private readonly CubesArray cubesArray;
@@ -26,6 +27,7 @@ namespace Assets.Scripts.Engine
 			CubesArray cubesArray,
 			AtomCubePool atomCubePool)
 		{
+			this.Color = color;
 			this.parameters = parameters;
 			this.cubesArray = cubesArray;
 			this.atomCubePool = atomCubePool;
