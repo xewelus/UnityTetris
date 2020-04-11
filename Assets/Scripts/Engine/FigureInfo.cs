@@ -90,8 +90,8 @@ namespace Assets.Scripts.Engine
 
 			if (needFix)
 			{
-				this.cubesArray.FixFigure();
 				this.ReleaseCubes();
+				this.cubesArray.FixFigure();
 			}
 			else
 			{
@@ -140,7 +140,7 @@ namespace Assets.Scripts.Engine
 		{
 			foreach (AtomCubePool.Item item in this.cubesItems)
 			{
-				this.atomCubePool.Release(item);
+				item.Release();
 			}
 		}
 

@@ -51,6 +51,12 @@ namespace Assets.Scripts.Engine
 			{
 				this.renderer.sharedMaterial = this.pool.materialsCache.GetOrCreate(color, this.pool.materialSample);
 			}
+
+			public void Release()
+			{
+				this.AtomCube.transform.parent = null;
+				this.pool.Release(this);
+			}
 		}
 	}
 }

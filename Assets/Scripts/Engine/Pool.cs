@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.Engine
 {
 	public class Pool<T> where T : class
 	{
-		private readonly Stack<T> objs = new Stack<T>();
+		private readonly HashSet<T> objs = new HashSet<T>();
 		private readonly Func<Pool<T>, T> createFunc;
 
 		public Pool(Func<Pool<T>, T> createFunc)
@@ -18,7 +19,15 @@ namespace Assets.Scripts.Engine
 			T obj;
 			lock (this.objs)
 			{
-				obj = this.objs.Count == 0 ? null : this.objs.Pop();
+				if (this.objs.Count == 0)
+				{
+					obj = null;
+				}
+				else
+				{
+					obj = this.objs.First();
+					this.objs.Remove(obj);
+				}
 			}
 			if (obj == null)
 			{
@@ -36,7 +45,10 @@ namespace Assets.Scripts.Engine
 		{
 			lock (this.objs)
 			{
-				this.objs.Push(obj);
+				if (!this.objs.Contains(obj))
+				{
+					this.objs.Add(obj);
+				}
 			}
 		}
 	}
