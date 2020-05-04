@@ -96,6 +96,7 @@ namespace Assets.Scripts
 						material = Instantiate(sample);
 						material.color = color;
 						material.name = ColorUtility.ToHtmlStringRGB(color);
+						material.SetColor("_BaseColor", color);
 						this.materials.Add(key, material);
 					}
 					return material;
