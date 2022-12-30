@@ -4,3 +4,4 @@ _ReSharper.Caches/
 obj/Debug/
 .vs/
 builds/
+/Logs/
